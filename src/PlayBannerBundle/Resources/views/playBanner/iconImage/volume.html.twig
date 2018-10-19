@@ -1,0 +1,207 @@
+<div id="volumeTool"
+     style="position: absolute;
+     width: 170px;
+     height: 30px;
+     top: 0px;
+     left: 30px;"
+     >
+
+    <div id='volumeIconButton' class='animatedButton'
+         style="position: absolute;
+         height: 30px;
+         width: 30px;
+         top: 0px;
+         left: 0px;
+         z-index: 1;
+         transition-property: all;
+         transition-duration: 1s;">
+        <img style='
+             width:30px; 
+             height:30px; 
+             opacity: 0.9;
+             z-index: 1;' 
+             src="files/images/icons/playBanner/volume.png" alt="Mountain View">
+    </div>
+
+    <div id="volumeBar"
+         style="background-color: #1ab7ea;
+         position: absolute;
+         width: 0px;
+         height: 5px;
+         top: 13px;
+         left: 30px;
+         opacity: 1;
+         transition-property: all;
+         transition-duration: 1s;">
+        <div id="volumeController"
+             style="background-color: black;
+             position: absolute;
+             width: 5px;
+             height: 5px;
+             top: 0px;
+             left: 0px;">
+        </div>
+    </div>
+
+</div>
+
+<script>
+    var status = 0;
+
+    var volumeIconButton = document.getElementById("volumeIconButton");
+    var volumeBar = document.getElementById("volumeBar");
+    var volumeTool = document.getElementById("volumeTool");
+    var volumeController = document.getElementById("volumeController");
+    var volumeIconButton = document.getElementById("volumeIconButton");
+
+    var captionsIconButton = document.getElementById("captionsIconButton");
+    var playPauseIconButton = document.getElementById("playPauseIconButton");
+    var qualityIconButton = document.getElementById("qualityIconButton");
+    var speedIconButton = document.getElementById("speedIconButton");
+    var totalScreenIconButton = document.getElementById("totalScreenIconButton");
+
+    volumeIconButton.addEventListener("mouseout", function () {
+        setOutStatus();
+    });
+    volumeIconButton.addEventListener("mouseover", function () {
+        setOverStatus();
+    });
+
+    volumeBar.addEventListener("mouseout", function () {
+        setOutStatus();
+    });
+    volumeBar.addEventListener("mouseover", function () {
+        setOverStatus();
+    });
+
+    volumeTool.addEventListener("mouseout", function () {
+        setOutStatus();
+    });
+    volumeTool.addEventListener("mouseover", function () {
+        setOverStatus();
+    });
+
+    volumeController.addEventListener("mouseout", function () {
+        setOutStatus();
+    });
+    volumeController.addEventListener("mouseover", function () {
+        setOverStatus();
+    });
+
+    volumeIconButton.addEventListener("mouseout", function () {
+        setOutStatus();
+    });
+    volumeIconButton.addEventListener("mouseover", function () {
+        setOverStatus();
+    });
+
+    function setOutStatus()
+    {
+        status = 0;
+        console.log("cero");
+    }
+
+    function setOverStatus()
+    {
+        status = 1;
+        console.log("one");
+    }
+
+
+
+
+
+
+    document.addEventListener("mousemove", function () {
+        manageVolumeOption();
+    });
+
+    function manageVolumeOption()
+    {
+        if (status == 1)
+        {
+{#            console.log("MTZ - SHOW");#}
+            showVolumeBar();
+        } else if (status == 0)
+        {
+{#            console.log("MTZ - HIDE");#}
+            hideVolumeBar();
+        }
+        console.log(status);
+    }
+
+    function hideVolumeBar()
+    {
+        volumeBar.style.width = "0px";
+        captionsIconButton.style.left = "120px";
+        totalScreenIconButton.style.left = "150px";
+    }
+
+    function showVolumeBar()
+    {
+        volumeBar.style.width = "100px";
+
+        captionsIconButton.style.left = "220px";
+        totalScreenIconButton.style.left = "250px";
+    }
+</script>
+
+<script>
+    $('#volumeController').draggable({containment: "#volumeBar", scroll: true});
+
+    var my_video = document.getElementById("my_video");
+    var volumeButtonInside = document.getElementById("volumeController");
+
+    volumeButtonInside.addEventListener("mousedown", volumeButtonClickF, false);
+
+    var estado = 0;
+    function volumeButtonClickF() {
+        estado = 1;
+        document.addEventListener("mousemove", volumeButtonMoveF, false);
+    }
+
+    function volumeButtonMoveF() {
+        var volumeValue = 50;
+        if (estado === 0)
+        {
+            console.log("desactivado");
+        } else
+        {
+            console.log(volumeButtonInside.style.left);
+
+            if (volumeButtonInside.style.left.substring(0, 2) === "0p"
+                    || volumeButtonInside.style.left.substring(0, 2) === "1p"
+                    || volumeButtonInside.style.left.substring(0, 2) === "2p"
+                    || volumeButtonInside.style.left.substring(0, 2) === "3p"
+                    || volumeButtonInside.style.left.substring(0, 2) === "4p"
+                    || volumeButtonInside.style.left.substring(0, 2) === "5p"
+                    || volumeButtonInside.style.left.substring(0, 2) === "6p"
+                    || volumeButtonInside.style.left.substring(0, 2) === "7p"
+                    || volumeButtonInside.style.left.substring(0, 2) === "8p"
+                    || volumeButtonInside.style.left.substring(0, 2) === "9p")
+            {
+                volumeValue = "0" + volumeButtonInside.style.left.substring(0, 1);
+            } else
+            {
+                volumeValue = volumeButtonInside.style.left.substring(0, 2);
+            }
+
+            my_video.volume = volumeValue / 100;
+        }
+    }
+</script>
+
+<script>
+    volumeIconButton.addEventListener("click", function () {
+        volumeIconFunction();
+    });
+
+    function volumeIconFunction()
+    {
+        if (my_video.muted) {
+            my_video.muted = false;
+        } else {
+            my_video.muted = true;
+        }
+    }
+</script>

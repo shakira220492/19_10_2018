@@ -1,0 +1,105 @@
+<div id='closeIconButton' class='animatedButton'
+     style="position: absolute;
+     height: 30px;
+     width: 30px;
+     top: 90px;
+     z-index: 3;
+     display: block;">
+    <img style='
+         width:30px; 
+         height:30px; 
+         opacity: 0.9;
+         z-index: 1;' 
+         src="files/images/icons/configuration/close.png" alt="Mountain View">
+</div>
+
+<div id='openIconButton' class='animatedButton'
+     style="position: absolute;
+     height: 30px;
+     width: 30px;
+     top: 90px;
+     z-index: 3;
+     display: none;">
+    <img style='
+         width:30px; 
+         height:30px; 
+         opacity: 0.9;
+         z-index: 1;' 
+         src="files/images/icons/configuration/open.png" alt="Mountain View">
+</div>
+
+<script>
+    var closeIconButton = document.getElementById("closeIconButton");
+    closeIconButton.addEventListener("click", closeConfigurationArea, false);
+    
+    var openIconButton = document.getElementById("openIconButton");
+    openIconButton.addEventListener("click", openConfigurationArea, false);
+    
+    function closeConfigurationArea()
+    {
+        if (size === "2")
+        {
+            var presentationArea = document.getElementById("presentationArea");
+            presentationArea.style.transitionProperty = "all";
+            presentationArea.style.transitionDuration = "0.4s";
+            presentationArea.style.width = $(window).width() - 280 + "px";
+        }
+        
+        var configurationArea = document.getElementById("configurationArea");
+        configurationArea.style.transitionProperty = "all";
+        configurationArea.style.transitionDuration = "0.4s";
+        configurationArea.style.width = 0 + "px";
+        
+        var videoInformation = document.getElementById("videoInformation");
+        videoInformation.style.transitionProperty = "all";
+        videoInformation.style.transitionDuration = "0.4s";
+        videoInformation.style.width = 0 + "px";
+        
+        var configurationBar = document.getElementById("configurationBar");
+        configurationBar.style.transitionProperty = "all";
+        configurationBar.style.transitionDuration = "0.4s";
+        configurationBar.style.right = 280 + "px";
+        
+        var displaceIcon = document.getElementById("displaceIcon");
+        displaceIcon.style.transitionProperty = "all";
+        displaceIcon.style.transitionDuration = "0.4s";
+        displaceIcon.style.right = 280 + "px";
+        
+        closeIconButton.style.display = "none";
+        openIconButton.style.display = "block";
+    }
+    
+    function openConfigurationArea()
+    {
+        if (size === "2")
+        {
+            var presentationArea = document.getElementById("presentationArea");
+            presentationArea.style.transitionProperty = "all";
+            presentationArea.style.transitionDuration = "0.4s";
+            presentationArea.style.width = currentValue22 + "px";
+        }
+        
+        var configurationArea = document.getElementById("configurationArea");
+        configurationArea.style.transitionProperty = "all";
+        configurationArea.style.transitionDuration = "0.4s";
+        configurationArea.style.width = 420 + "px";
+        
+        var videoInformation = document.getElementById("videoInformation");
+        videoInformation.style.transitionProperty = "all";
+        videoInformation.style.transitionDuration = "0.4s";
+        videoInformation.style.width = 420 + "px";
+        
+        var configurationBar = document.getElementById("configurationBar");
+        configurationBar.style.transitionProperty = "all";
+        configurationBar.style.transitionDuration = "0.4s";
+        configurationBar.style.right = 700 + "px";
+        
+        var displaceIcon = document.getElementById("displaceIcon");
+        displaceIcon.style.transitionProperty = "all";
+        displaceIcon.style.transitionDuration = "0.4s";
+        displaceIcon.style.right = 700 + "px";
+        
+        closeIconButton.style.display = "block";
+        openIconButton.style.display = "none";
+    }
+</script>

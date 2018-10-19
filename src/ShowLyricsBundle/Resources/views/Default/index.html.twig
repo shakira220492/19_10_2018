@@ -1,0 +1,252 @@
+<script>
+{#    var my_video2222 = document.getElementById("my_video");
+    
+    my_video2222.onloadstart = get_video_lyric();#}
+        
+    function moveLyrics()
+    {
+        var v = document.getElementById("my_video");
+        var videoDuration_2 = v.duration;
+
+        var animatedLyrics_2 = setInterval(function() {
+        
+        var currentTime = v.currentTime;
+        
+        // cuando llegue a la ultima palabra que me haga clearInterval
+        
+        
+        console.log("currentTime... "+currentTime);
+        
+{#                lyricsWord[d][e][0] = keywordId;
+                lyricsWord[d][e][1] = keywordContent;
+                lyricsWord[d][e][2] = lyricslineId;
+                lyricsWord[d][e][3] = lyricswordId;
+                lyricsWord[d][e][4] = lyricswordStarttime;
+                lyricsWord[d][e][5] = lyricswordEndtime;
+                lyricsWord[d][e][6] = amountKeywords;
+                lyricsWord[d][e][7] = palabra;
+                lyricsWord[d][e][8] = estrofa;
+                lyricsWord[d][e][9] = amountWord;
+                lyricsWord[d][e][10] = amountLyricsLine;
+                lyricsWord[d][e][11] = currentWordPosition;#}
+        
+        
+        if (currentTime === 0)
+        {
+            console.log("video inabilitado por el momento");
+        } else
+        {
+            if (lyricsWord[d_estrofas][e_palabras][0])
+            {
+                var startTime = lyricsWord[d_estrofas][e_palabras][4];
+                var endTime = lyricsWord[d_estrofas][e_palabras][5];
+
+                if (currentTime >= startTime && currentTime >= endTime)
+                {
+                    // la currentWord esta antes,
+                    // no esta disponible porque su tiempo ya pasó
+                    // ya pasó
+                    
+                    // seleccione la siguiente palabra (e_palabras++)
+                    
+                    console.log("currentTime... inside else "+currentTime);
+                    console.log("startTime: "+startTime+" endTime: "+endTime);
+                    // desalumbrar la RESPECTIVA palabra (id)
+                    e_palabras++;
+                }
+                else if (currentTime >= startTime && currentTime <= endTime)
+                {
+                    // alumbrar la RESPECTIVA palabra (id)
+                    var lyricsWordId = lyricsWord[d_estrofas][e_palabras][0];
+                    var respectlyWordId = "lyricsWord"+lyricsWordId;
+                    var respectlyWord = document.getElementById(respectlyWordId);
+
+                    respectlyWord.style.transitionProperty = "all";
+                    respectlyWord.style.transitionDuration = "0.6s";
+                    respectlyWord.style.backgroundColor = "gray";
+
+                    console.log("currentTime... inside if "+currentTime);
+                    console.log("startTime: "+startTime+" endTime: "+endTime);
+
+                    console.log("respectly word... "+lyricsWordId);
+                }
+                else if (currentTime <= startTime && currentTime <= endTime)
+                {
+                    // la currentWord esta después,
+                    // esta disponible y preparada para pasar
+                    // pero no ha pasado todavía
+                }
+                                
+                // alumbrar la estrofa actual: 
+                var lyricsLineIdDB = lyricsWord[d_estrofas][e_palabras][2];
+                var lyricsLineId = "lyricsLine"+lyricsLineIdDB;
+
+                var currentLyricsLine = document.getElementById(lyricsLineId);
+
+                currentLyricsLine.style.transitionDuration = "0.4s";
+                currentLyricsLine.style.opacity = "1";
+            }
+            else 
+            {
+                
+                e_palabras = 0;
+                d_estrofas++;
+
+                if (lyricsWord[d_estrofas][e_palabras][0])
+                {
+                } else
+                {
+                    clearInterval(animatedLyrics_2);
+                }
+
+                var amountLyricsLine = lyricsWord[d_estrofas][e_palabras][10];
+                
+                for (i=0; i<amountLyricsLine; i++)
+                {
+                    // recorre todas las estrofas: 
+                    var lyricsLineIdDB = lyricsWord[i][e_palabras][2];
+                    var lyricsLineId = "lyricsLine"+lyricsLineIdDB;
+                    
+                    var lyricsLine = document.getElementById(lyricsLineId);
+                    
+                    var currentPosition = lyricsLine.style.top;
+                    
+                    var currentLyricsLinePosition = parseInt(currentPosition);
+                    var nextLyricsLinePosition = currentLyricsLinePosition - 50;
+                    
+                    lyricsLine.style.transitionDuration = "0.4s";
+                    lyricsLine.style.top = nextLyricsLinePosition+"px";
+                    
+                    
+                    
+                    
+                    
+                    // desalumbrar todas las lineas
+                    var lyricsLineIdDB = lyricsWord[i][e_palabras][2];
+                    var lyricsLineId = "lyricsLine"+lyricsLineIdDB;
+
+                    var currentLyricsLine = document.getElementById(lyricsLineId);
+
+                    currentLyricsLine.style.transitionDuration = "0.4s";
+                    currentLyricsLine.style.opacity = "0.4";
+                    
+                }
+            }
+        }
+        
+        
+    }, 1);
+    }
+    
+    function get_video_lyric()
+    {
+        {#alert("get_video_lyric, funciona");#}
+        
+        var form = $('#get-video-lyric-ajax');
+        var url = form.attr('action');
+
+        $.post(url, {current_video_id: current_video_id}, function (data)
+        {
+            var amountLyricsLine = data[0][0].amountLyricsLine;
+            
+            var lyricsArea2 = document.getElementById("lyricsArea2");
+            lyricsArea2.innerHTML = "";
+            
+            lyricsPosition = 0;
+            
+            for (d=0; d<amountLyricsLine; d++)
+            {
+                var lyricslineId = data[d][0].lyricslineId;
+                drawNewLine(lyricslineId);
+                
+                var amountWord = data[d][0].amountWord;
+                
+                estrofaAmount = amountLyricsLine; 
+                palabraAmount = amountWord;                 
+                
+                for (e=0; e<=amountWord; e++)
+                {
+                    var keywordId = data[d][e].keywordId;
+                    var keywordContent = data[d][e].keywordContent;
+                    var lyricslineId = data[d][e].lyricslineId;
+                    var lyricswordId = data[d][e].lyricswordId;
+                    var lyricswordStarttime = data[d][e].lyricswordStarttime;
+                    var lyricswordEndtime = data[d][e].lyricswordEndtime;
+                    var amountKeywords = data[d][e].amountKeywords;
+                    var palabra = data[d][e].palabra;
+                    var estrofa = data[d][e].estrofa;
+                    var amountWord = data[d][e].amountWord;
+                    var amountLyricsLine = data[d][e].amountLyricsLine;
+                    var currentWordPosition = data[d][e].currentWordPosition;
+                    
+                    lyricsWord[d][e][0] = keywordId;
+                    lyricsWord[d][e][1] = keywordContent;
+                    lyricsWord[d][e][2] = lyricslineId;
+                    lyricsWord[d][e][3] = lyricswordId;
+                    lyricsWord[d][e][4] = lyricswordStarttime;
+                    lyricsWord[d][e][5] = lyricswordEndtime;
+                    lyricsWord[d][e][6] = amountKeywords;
+                    lyricsWord[d][e][7] = palabra;
+                    lyricsWord[d][e][8] = estrofa;
+                    lyricsWord[d][e][9] = amountWord;
+                    lyricsWord[d][e][10] = amountLyricsLine;
+                    lyricsWord[d][e][11] = currentWordPosition;
+                    
+                    appendWordToLine(
+                            keywordId,
+                            keywordContent,
+                            lyricslineId,
+                            lyricswordId,
+                            lyricswordStarttime,
+                            lyricswordEndtime,
+                            amountKeywords,
+                            palabra,
+                            estrofa,
+                            amountWord,
+                            amountLyricsLine,
+                            currentWordPosition
+                        );
+                
+                }
+            }
+            moveLyrics();
+        }).fail(function () {
+            alert('ERROR #get-video-lyric-ajax');
+        });
+    }
+
+    
+    
+    function drawNewLine(lyricslineId)
+    {
+        lyricsPosition += 50;
+        $("#lyricsArea2").append(
+            "<div id='lyricsLine"+lyricslineId+"' class='lyricsLine' style='top: "+lyricsPosition+"px;'>"+
+            " "+
+            "</div>"
+        );
+    }
+    
+    function appendWordToLine(
+                keywordId,
+                keywordContent,
+                lyricslineId,
+                lyricswordId,
+                lyricswordStarttime,
+                lyricswordEndtime,
+                amountKeywords,
+                palabra,
+                estrofa,
+                amountWord,
+                amountLyricsLine,
+                currentWordPosition
+            )
+    {
+        $("#lyricsLine"+lyricslineId).append(
+            "<div id='lyricsWord"+keywordId+"' class='lyricsWord'>"+
+            "&nbsp"+keywordContent+"&nbsp"+
+            "</div>"
+        );
+    }
+    
+</script>

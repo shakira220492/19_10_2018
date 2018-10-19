@@ -1,0 +1,210 @@
+{{ form_start(get_user_specific_information_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'get-user-specific-information-ajax'|default('form')} }) }}
+{{ form_end(get_user_specific_information_form_ajax) }}
+
+<style>
+
+    #userInformation {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        left: 0px;
+        height: 120px;
+        display: block;
+        font-size: smaller;
+        overflow-y: hidden;
+        overflow-x: hidden;
+    }
+    
+    #dataminingButton {
+        position: absolute;
+        top: 0px;
+        right: 30px;
+    }
+    
+    #historyButton {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+    }
+    
+    #name_profile_content {
+{#        background-color: #ccff00;#}
+        display: none;
+    }
+    
+
+    
+
+
+
+    
+    #dataminingSongs {
+{#        background-color: #2EA265;#}
+        display: none;
+    }
+    
+    #historySongs {
+{#        background-color: #DE3152;#}
+        display: none;
+    }
+    
+    #specificListSongs {
+{#        background-color: #1ab7ea;#}
+        display: none;
+    }
+    
+    .profile_content {
+        position: absolute;
+        top: 40px;
+        right: 0px;
+        left: 0px;
+        bottom: 0px;
+        overflow-y: scroll;
+    }
+</style>
+
+<div id="userInformation">
+    <div id="name_profileButton" class="animatedButton">
+    </div>
+
+    <div id="playlist_profileButton" class="animatedButton">
+    </div>
+    
+    <div id="dataminingButton" class="animatedButton">
+        <img style='width:30px; height:30px; opacity: 0.9;' 
+        src="files/images/icons/configuration/datamining.png" alt="Mountain View">
+    </div>
+    
+    <div id="historyButton" class="animatedButton">
+        <img style='width:30px; height:30px; opacity: 0.9;' 
+        src="files/images/icons/configuration/history.png" alt="Mountain View">
+    </div>
+</div>
+
+
+
+{# CONTENT... #}
+
+<div id="name_profile_content" class="profile_content">
+    {{ include('@EditProfile/Default/index.html.twig') }}
+</div>
+
+<div id="dataminingSongs" class="profile_content">
+    {{ include('@Datamining/Default/index.html.twig') }}
+</div>
+
+<div id="historySongs" class="profile_content">
+    {{ include('@History/Default/index.html.twig') }}
+</div>
+
+<div id="specificListSongs" class="profile_content">
+    {{ include('@List/Default/index.html.twig') }}
+</div>
+
+<script>
+    
+    function ProfileBundle()
+    {
+        getUserSpecificInformation();
+    }
+    
+    function getUserSpecificInformation()
+    {
+        var form = $('#get-user-specific-information-ajax');
+        var url = form.attr('action');
+
+        $.post(url, function (data)
+        {
+            var userId = data[0].userId;
+            var userName = data[0].userName;
+            var userFirstgivenname = data[0].userFirstgivenname;
+            var userSecondgivenname = data[0].userSecondgivenname;
+            var userFirstfamilyname = data[0].userFirstfamilyname;
+            var userSecondfamilyname = data[0].userSecondfamilyname;
+            var userEmail = data[0].userEmail;
+            var userPassword = data[0].userPassword;
+            var userBiography = data[0].userBiography;
+            var amountFollowers = data[0].amountFollowers;
+            var amountInfluencers = data[0].amountInfluencers;
+            var amountVideos = data[0].amountVideos;
+            var amountSpecificLists = data[0].amountSpecificLists;
+            
+            var name_profileButton = document.getElementById("name_profileButton");
+            var playlist_profileButton = document.getElementById("playlist_profileButton");
+          
+            name_profileButton.innerHTML = userFirstgivenname + " " + userSecondgivenname + " " + userFirstfamilyname + " " + userSecondfamilyname; 
+            playlist_profileButton.innerHTML = "LISTS: "+amountSpecificLists; 
+            
+        }).fail(function () {
+            alert('ERROR... get-user-specific-information-ajax');
+        });
+    }
+</script>
+    
+<script>
+    var name_profileButton = document.getElementById("name_profileButton");
+    name_profileButton.addEventListener("click", drawInfoProfile, false);
+    
+    var playlist_profileButton = document.getElementById("playlist_profileButton");
+    playlist_profileButton.addEventListener("click", drawSpecificlistProfile, false);
+    
+    var dataminingButton = document.getElementById("dataminingButton");
+    dataminingButton.addEventListener("click", drawDataminingSongs, false);
+    
+    var historyButton = document.getElementById("historyButton");
+    historyButton.addEventListener("click", drawHistorySongs, false);
+    
+    function clearOptionsFromProfile()
+    {
+        var name_profile_content = document.getElementById("name_profile_content");
+        var dataminingSongs = document.getElementById("dataminingSongs");
+        var historySongs = document.getElementById("historySongs");
+        var specificListSongs = document.getElementById("specificListSongs");
+        
+        name_profile_content.style.display = "none";
+        dataminingSongs.style.display = "none";
+        historySongs.style.display = "none";
+        specificListSongs.style.display = "none";
+    }
+
+    function drawInfoProfile()
+    {
+        clearOptionsFromProfile();
+        var name_profile_content = document.getElementById("name_profile_content");
+        name_profile_content.style.display = "block";
+        
+        // traer los datos del usuario y dibujarlos cuando el usuario se loguee
+    }
+
+
+
+    function drawSpecificlistProfile()
+    {
+        clearOptionsFromProfile();
+        var specificListSongs = document.getElementById("specificListSongs");
+        specificListSongs.style.display = "block";
+        
+        // traer los datos de las specific list y dibujarlos cuando el usuario se loguee
+    }
+
+    function drawDataminingSongs()
+    {
+        alert("datamining songs");
+        clearOptionsFromProfile();
+        var dataminingSongs = document.getElementById("dataminingSongs");
+        dataminingSongs.style.display = "block";
+        
+        // traer los datos del datamining list y dibujarlos cuando el usuario se loguee
+    }
+    
+    function drawHistorySongs()
+    {
+        alert("history songs");
+        clearOptionsFromProfile();
+        var historySongs = document.getElementById("historySongs");
+        historySongs.style.display = "block";
+        
+        // traer los datos del historyList y dibujarlos cuando el usuario se loguee
+    }
+
+</script>

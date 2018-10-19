@@ -1,0 +1,4 @@
+get_datamining_songs_form:
+    path:     /getDataminingSongs
+    defaults: { _controller: DataminingBundle:Default:getDataminingSongs }
+    methods:  POST

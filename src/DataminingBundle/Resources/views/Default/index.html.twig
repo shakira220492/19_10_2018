@@ -1,0 +1,105 @@
+{{ form_start(get_datamining_songs_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'get-datamining-songs-ajax'|default('form')} }) }}
+{{ form_end(get_datamining_songs_form_ajax) }}
+
+
+{#<div id="dataminingBundle">
+    status Session
+</div>
+
+<div style="position: absolute;
+     top: 0px;
+     left: 0px;">
+    <p>DATAMINING</p>
+</div>
+<div id="dataminingContent-listBundle"
+     style="overflow-y: scroll;
+     position: absolute;
+     top: 20px;
+     bottom: 0px;
+     left: 0px;
+     right: 0px;">
+</div>#}
+
+<script>
+    
+    function DataminingBundle()
+    {
+        getDataminingSongs();
+    }
+    
+{#    var dataminingButton = document.getElementById('dataminingButton');
+    dataminingButton.addEventListener("click", getDataminingSongs, false);#}
+    
+    // pasar a su respectivo bundle; este bundle se activa (refresca) solamente cuando el usuario inicia la sesion... o en un intervalo de 1 hora
+    function getDataminingSongs()
+    {
+        var form = $('#get-datamining-songs-ajax');
+        var url = form.attr('action');
+
+        $.post(url, function (data)
+        {
+            var amountVideos = data[0].amountVideos;
+            
+            for (i = 0; i < amountVideos; i++)
+            {
+                var videoId = data[i].videoId;
+                var videoName = data[i].videoName;
+                var videoDescription = data[i].videoDescription;
+                var videoImage = data[i].videoImage;
+                var videoContent = data[i].videoContent;
+                var videoUpdatedate = data[i].videoUpdatedate;
+                var videoAmountViews = data[i].videoAmountViews;
+                var videoAmountComments = data[i].videoAmountComments;
+                var videoLikes = data[i].videoLikes;
+                var videoDislikes = data[i].videoDislikes;
+                var userId = data[i].userId;
+                var userName = data[i].userName;
+                var amountVideos = data[i].amountVideos;
+                
+                var percentageLikes = (100 * videoLikes) / (videoLikes + videoDislikes);
+                var percentageDislikes = (100 * videoDislikes) / (videoLikes + videoDislikes);
+                
+                $("#dataminingSongs").append(
+                    "<div id='videoPortrait_Datamining"+videoId+"' style='opacity:0.4; cursor: pointer;' "
+                    +"onclick='showVideo("+videoId+", \""+videoName+"\", \""+videoDescription+"\", \""+videoImage+"\", \""+videoContent+"\", \""+videoUpdatedate+"\", "+videoAmountViews+", "+videoAmountComments+", "+videoLikes+", "+videoDislikes+"), "
+                    +"updateVideoInformation(\""+videoName+"\", \""+userName+"\");' "
+                    +"onmouseover='highlightPortrait(\"videoPortrait_Datamining"+videoId+"\");' "
+                    +"onmouseout='hidePortrait(\"videoPortrait_Datamining"+videoId+"\");'>"
+
+                        +"<table border='0' width='100%'>"
+                        +"<tr height='100px'>"
+                            +"<td width='170px' height='100px'>"
+                                +"<div style='overflow:hidden; height:100px; width:170px; text-align:center; background-color: white;'>"
+                                    +"<img style='"
+                                    +"height:100%; cursor: pointer;"
+                                    +"opacity: 0.9; "
+                                    +"z-index: 1;' "
+                                    +"src='files/"+videoImage+"' "
+                                    +"alt='Mountain View'>"
+                                +"</div>"
+                            +"</td>"
+                            +"<td>"
+                                +"<div>"
+                                    +" <b>"+videoName+"</b><br>"
+                                    +" "+videoUpdatedate+"<br>"
+                                    +" "+videoAmountViews+" views<br>"
+                                    +" "+videoAmountComments+" comments<br>"
+                                    +" <div style='height: 5px; width: 100%;'>"
+                                        +"<div style='display: inline-block; height: 5px; width: "+percentageLikes+"%; background-color: blue; '></div>"
+                                        +"<div style='display: inline-block; height: 5px; width: "+percentageDislikes+"%; background-color: red; '></div>"
+                                    +" </div>"
+                                +"</div>"
+                            +"</td>"
+                        +"</tr>"
+                        +"</table>"
+                    +"</div>"
+                );
+              
+            }
+            
+        }).fail(function () {
+            alert('ERROR #get-datamining-songs-ajax');
+        });
+    }
+    
+</script>

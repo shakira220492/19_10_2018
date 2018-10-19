@@ -1,0 +1,99 @@
+<style>
+    #infoAboutUser-session {
+        {#        background-color: #ccc;#}
+        cursor: pointer;
+        color: white;
+        font-size: small;
+        z-index: 11;
+        transition-property: all;
+        transition-duration: 1s;
+        position: relative;
+        {#        opacity: 0.5;#}
+        {#        display: inline-block;#}
+        white-space: nowrap;
+    }
+
+    #infoAboutUser-session:hover {
+        color: #1ab7ea;
+    }
+</style>
+
+<div id="btnLogOut"
+     style="
+     position: absolute;
+     height: 25px;
+     width: 65px;
+     top: 70px;
+     left: 93px;
+     z-index: 10;
+     {#background-color: white;#}">
+    <div id="backgroundColorcloseWindow"
+         style="position: absolute;
+         width: 100%;
+         height: 100%;
+         background-color: white;
+         opacity: 0.5;">
+    </div>
+    <div style="
+         width: 100%; 
+         height: 100%;
+         top: 0px;
+         right: 0px;
+         position: absolute;
+         cursor: pointer;
+         {#background-color: white;#}">
+        LOG OUT
+    </div>
+</div>
+
+<div id="infoAboutUser-sessionFrame"
+     style="
+     position: absolute;
+     height: 100%;
+     width: 100%;
+     top: 0px;
+     right: 0px;
+     z-index: 9;
+     color: white;">
+    <div id="infoAboutUser-sessionBackground"
+         style="position: absolute;
+         top: 0px;
+         right: 0px;
+         width: 100%;
+         height: 100%;
+         background-color: gray;
+         opacity: 0.2;">
+    </div>
+    <div id="infoAboutUser-session" class="animatedButton">
+    </div>
+</div>
+     
+<script>
+    var profileIconButton = document.getElementById('infoAboutUser-session');
+    
+    profileIconButton.addEventListener("click", show_profileIconContent, false);
+    {#profileIconButton.addEventListener("click", drawSpecificlistProfile, false);#}
+    
+    function show_profileIconContent()
+    {
+        drawSpecificlistProfile();
+        
+        var profileIconContent = document.getElementById('profileIconContent');
+        
+        if (profileIconContent.style.display == "none")
+        {
+            clear_options();
+            profileIconContent.style.display = "block";
+        } else
+        {
+            profileIconContent.style.display = "none";
+        }
+    }
+    
+    function hide_profileIconContent()
+    {
+        var profileIconContent = document.getElementById('profileIconContent');
+        clear_options();
+        profileIconContent.style.display = "none";
+    }
+</script>

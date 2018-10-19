@@ -1,0 +1,3 @@
+video_information_homepage:
+    path:     /VideoInformationBundle
+    defaults: { _controller: VideoInformationBundle:Default:index }

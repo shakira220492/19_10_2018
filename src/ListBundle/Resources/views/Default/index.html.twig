@@ -1,0 +1,299 @@
+{{ form_start(set_specificList_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'set-specificList-ajax'|default('form')} }) }}
+{{ form_end(set_specificList_form_ajax) }}
+
+{{ form_start(get_specificList_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'get-specificList-ajax'|default('form')} }) }}
+{{ form_end(get_specificList_form_ajax) }}
+
+{{ form_start(set_specificListVideo_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'set-specificListVideo-ajax'|default('form')} }) }}
+{{ form_end(set_specificListVideo_form_ajax) }}
+
+{{ form_start(get_specificListVideo_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'get-specificListVideo-ajax'|default('form')} }) }}
+{{ form_end(get_specificListVideo_form_ajax) }}
+
+{{ form_start(delete_specificList_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'delete-specificList-ajax'|default('form')} }) }}
+{{ form_end(delete_specificList_form_ajax) }}
+
+{{ form_start(delete_specificListVideo_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'delete-specificListVideo-ajax'|default('form')} }) }}
+{{ form_end(delete_specificListVideo_form_ajax) }}
+
+{{ form_start(edit_specificListVideo_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'edit-specificListVideo-ajax'|default('form')} }) }}
+{{ form_end(edit_specificListVideo_form_ajax) }}
+
+{{ form_start(edit_specificList_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'edit-specificList-ajax'|default('form')} }) }}
+{{ form_end(edit_specificList_form_ajax) }}
+
+{{ form_start(play_specific_list_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'play-specific-list-ajax'|default('form')} }) }}
+{{ form_end(play_specific_list_form_ajax) }}
+
+<style>
+    .openFrame{
+        color: white;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        padding: 13px;
+        text-align: center;
+{#        transition: 0.4s;#}
+        display: none;
+        opacity: 0;
+        background-color: #ccc;
+    }
+{#    .openFrame:hover{
+        background-color: #1ab7ea;
+    }#}
+
+    
+    .closeFrame{
+        color: white;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        padding: 13px;
+        text-align: center;
+{#        transition: 0.4s;#}
+        opacity: 0;
+        background-color: #ccc;
+    }
+{#    .closeFrame:hover{
+        background-color: #1ab7ea;
+    }#}
+    
+    
+    .deleteListVideo{
+        color: white;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        padding: 13px;
+        text-align: center;
+{#        transition: 0.4s;#}
+        opacity: 0;
+        background-color: #ccc;
+    }
+{#    .deleteListVideo:hover{
+        background-color: #1ab7ea;
+    }#}
+    
+    
+    .editListVideo{
+        color: white;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        padding: 13px;
+        text-align: center;
+{#        transition: 0.4s;#}
+        opacity: 0;
+        background-color: #ccc;
+    }
+{#    .editListVideo:hover{
+        background-color: #1ab7ea;
+    }#}
+
+    
+    .playListVideo{
+        color: white;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        padding: 13px;
+        text-align: center;
+{#        transition: 0.4s;#}
+        opacity: 0;
+        background-color: #ccc;
+    }
+{#    .playListVideo:hover{
+        background-color: #1ab7ea;
+    }#}
+    
+    .addToListVideo{
+        color: white;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        padding: 13px;
+        text-align: center;
+{#        transition: 0.4s;#}
+        opacity: 0;
+        background-color: #ccc;
+    }
+{#    .addToListVideo:hover{
+        background-color: #1ab7ea;
+    }#}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    .replayVideo{
+        color: white;
+        {#background-color: #1ab7ea;#}
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        padding: 13px;
+        transition: 0.4s;
+        opacity: 0;
+    }
+{#    .replayVideo:hover{
+        background-color: #1ab7ea;
+    }#}
+    
+    .playVideo{
+        color: white;
+        {#background-color: #1ab7ea;#}
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        padding: 13px;
+        transition: 0.4s;
+        opacity: 0;
+    }
+{#    .playVideo:hover{
+        background-color: #1ab7ea;
+    }#}
+    
+    
+    .deleteVideo{
+        color: white;
+        {#background-color: #1ab7ea;#}
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        padding: 13px;
+        transition: 0.4s;
+        opacity: 0;
+    }
+{#    .deleteVideo:hover{
+        background-color: #1ab7ea;
+    }#}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    .accordion22{
+{#        background-color: #eee;#}
+        color: white;
+        cursor: pointer;
+        width: 100%;
+        text-align: left;
+        border: none;
+        outline: none;
+{#        transition: 0.4s;#}
+    }
+    
+    
+    .leyendListVideo{
+        color: white;
+        cursor: text;
+        width: 100%;
+        height: 100%;
+        padding: 13px;
+        transition: 0.4s;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    .infoVideo{
+        color: white;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        transition: 0.4s;
+        opacity: 0.7;
+    }
+    
+    .contentVideo{
+        color: white;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        transition: 0.4s;
+    }
+    
+    .active, {#.accordion22:hover, .respectlyVideo:hover#}{
+        background-color: #ccc;
+    }
+
+    .accordion22:after{
+        font-size: 13px;
+        color: #777;
+        float: right;
+        margin-left: 5px;
+    }
+
+
+    .panel22{
+        padding: 0 18px;
+{#        background-color: royalblue;#}
+        color: white;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.2s ease-out;
+    }
+</style>
+
+
+
+<div id="listBundle"
+     style='
+     position: absolute;
+     top: 0px;
+     bottom: 0px;
+     left: 0px;
+     right: 0px;
+     z-index: 10;'>
+
+    <div id="listBundle-specific" 
+         style="
+         position: absolute;
+         bottom: 0px;
+         top: 0px;
+         left: 0px;
+         right: 0px;
+         z-index: 1;">
+        <div style="position: absolute;
+             width: 100%;
+             height: 100%;
+             z-index: 2;">
+            {{ include('@List/List/iconExplanation/specific.html.twig') }}
+        </div>
+    </div>
+</div>

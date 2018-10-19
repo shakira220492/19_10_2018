@@ -1,0 +1,4 @@
+services:
+#    video_information.example:
+#        class: VideoInformationBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

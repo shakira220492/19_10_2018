@@ -1,0 +1,322 @@
+{{ form_start(checkout_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'checkout-ajax'|default('form')} }) }}
+{{ form_end(checkout_form_ajax) }}
+
+{{ form_start(post_payment_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'post-payment-ajax'|default('form')} }) }}
+{{ form_end(post_payment_form_ajax) }}
+
+{{ form_start(get_payment_status_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'get-payment-status-ajax'|default('form')} }) }}
+{{ form_end(get_payment_status_form_ajax) }}
+
+{{ form_start(get_artist_info_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'get-artist-info-ajax'|default('form')} }) }}
+{{ form_end(get_artist_info_form_ajax) }}
+
+<style>
+    div#paypal_donateButton {
+        -webkit-animation: donateButton22 10s;
+        animation: donateButton22 2s linear 2s infinite alternate;
+    }
+
+    @-webkit-keyframes donateButton22 {
+        0%{opacity: 1; width: 30px; height: 30px; top: 100px; left: 10px;}
+        20%{opacity: 0.4; width: 30px; height: 30px; top: 100px; left: 10px;}
+        40%{opacity: 1; width: 26px; height: 26px; top: 102px; left: 12px;}
+        60%{opacity: 0.4; width: 26px; height: 26px; top: 102px; left: 12px;}
+        80%{opacity: 1; width: 30px; height: 30px; top: 100px; left: 10px;}
+        100%{opacity: 0.4; width: 30px; height: 30px; top: 100px; left: 10px;}
+    }
+    
+    #paypal_donateButton {
+        position: absolute;
+        font-weight: bold;
+        line-height: 25px;
+        transition-property: all;
+        transition-duration: 0.5s;
+        z-index: 2;
+    }
+    
+    #paypal_donateForm_content {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 0px;
+        height: 0px;
+        overflow: hidden;
+        z-index: 1;
+        transition-property: all;
+        transition-duration: 0.5s;
+    }
+    
+    #paypal_donateForm_background {
+        position: absolute;
+        background: white;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+    }
+    
+    #paypal_donateArtistInput {
+        position: absolute;
+        width: 275px; 
+        height: 30px;
+        top: 10px;
+        left: 50px;
+    }
+    
+    #paypal_sendArtistInfoButton {
+        position: absolute;
+        top: 10px;
+        left: 335px;
+        cursor: pointer;
+        width: 30px; 
+        height: 30px;
+        background-color: white; 
+        text-align: center;
+    }
+        
+    #paypal_artistProfilePhoto {
+        position: absolute;
+        width: 140px;
+        height: 120px;
+        top: 50px;
+        left: 225px;
+    }
+    
+    #paypal_artistUsername {
+        position: absolute;
+        color: white;
+        width: 165px;
+        height: 20px;
+        top: 50px;
+        left: 50px;        
+    }
+    
+    #paypal_artistFollowers {
+        position: absolute;
+        color: white;
+        width: 165px;
+        height: 20px;
+        top: 70px;
+        left: 50px;        
+    }
+    
+    #paypal_artistFollowing {
+        position: absolute;
+        color: white;
+        width: 165px;
+        height: 20px;
+        top: 90px;
+        left: 50px;
+    }
+    
+    #paypal_artistRealName {
+        position: absolute;
+        color: white;
+        width: 165px;
+        height: 20px;
+        top: 110px;
+        left: 50px;
+    }
+
+    #paypal_sendAmountToDonateInput {
+        position: absolute;
+        width: 125px;
+        height: 30px;
+        top: 140px;
+        left: 90px;
+    }
+    
+    #paypal_button {
+        position: absolute;
+        background-color: yellow;
+        top: 180px;
+        left: 136px;
+        width: 100px;
+        height: 30px;
+    }
+    
+    #paypal_currency {
+        position: absolute;
+        background-color: white;
+        text-align: center;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        top: 140px;
+        left: 50px;
+    }
+    
+</style>
+
+<div id="paypal_donateButton">
+    <img src="files/images/icons/video/donate.png"
+         style="
+         cursor: pointer;
+         width: 100%; 
+         height: 100%;
+         overflow: scroll;">
+</div>
+
+<div id="paypal_donateForm_content">
+    <div id="paypal_donateForm_background">
+    </div>
+        
+    <input id="paypal_donateArtistInput"
+        type="text" 
+        name="paypal_donateArtistInput" 
+        placeholder="-">
+        
+    <div id="paypal_sendArtistInfoButton" class="animatedButton">
+        OK
+    </div>
+    
+    <div id="paypal_artistProfilePhoto">
+    </div>
+    
+    <div id="paypal_artistUsername">
+    </div>
+    
+    <div id="paypal_artistFollowers">
+    </div>
+    
+    <div id="paypal_artistFollowing">
+    </div>
+    
+    <div id="paypal_artistRealName">
+    </div>
+        
+    <div id="paypal_currency" class="animatedButton">
+        USD
+    </div>
+    
+    <input id="paypal_sendAmountToDonateInput"
+            type="text" 
+            name="item_number" 
+            placeholder="$">
+
+    <div id="paypal_button">
+        PAYPAL
+    </div>
+    
+</div>
+
+<script>
+    var paypal_donateButton = document.getElementById("paypal_donateButton");
+    paypal_donateButton.addEventListener("click", showDonateForm, false);
+    
+    function showDonateForm()
+    {
+        var paypal_donateForm_content = document.getElementById("paypal_donateForm_content");
+        
+        if (paypal_donateForm_content.style.width == "0px")
+        {
+            paypal_donateForm_content.style.width = "375px";
+            paypal_donateForm_content.style.height = "225px";
+        } else
+        {
+            paypal_donateForm_content.style.width = "0px";
+            paypal_donateForm_content.style.height = "225px";
+        }
+    }
+    
+    var paypal_sendArtistInfoButton = document.getElementById("paypal_sendArtistInfoButton");
+    paypal_sendArtistInfoButton.addEventListener("click", getArtistInfo, false);
+    
+    function getArtistInfo()
+    {
+        var form = $('#get-artist-info-ajax');
+        var url = form.attr('action');
+
+        var paypal_donateArtistInput = document.getElementById("paypal_donateArtistInput").value;
+        var userName = paypal_donateArtistInput;
+
+        $.post(url, {userName: userName}, function (data)
+        {
+            
+            
+            
+            var paypal_artistProfilePhoto = document.getElementById("paypal_artistProfilePhoto");
+            var paypal_artistUsername = document.getElementById("paypal_artistUsername");
+            var paypal_artistFollowers = document.getElementById("paypal_artistFollowers");
+            var paypal_artistFollowing = document.getElementById("paypal_artistFollowing");
+            var paypal_artistRealName = document.getElementById("paypal_artistRealName");
+            
+            var userProfilephoto = data[0].userProfilephoto;
+            var userName = data[0].userName;
+            var userFirstgivenname = data[0].userFirstgivenname;
+            var userFirstfamilyname = data[0].userFirstfamilyname;
+            var amountFollowers = data[0].amountFollowers;
+            var amountInfluencers = data[0].amountInfluencers;
+            
+            paypal_artistProfilePhoto.innerHTML = 
+                "<img src='" + userProfilephoto + "' alt='Mountain View' style='height:100%;'>";
+            paypal_artistUsername.innerHTML = userName;
+            paypal_artistFollowers.innerHTML = "Followers: "+amountFollowers;
+            paypal_artistFollowing.innerHTML = "Following: "+amountInfluencers;
+            paypal_artistRealName.innerHTML = userFirstgivenname + " " + userFirstfamilyname;;
+            
+        }).fail(function () {
+            alert('GET ARTIST INFO ERROR');
+        });
+    }
+    
+    
+    
+    
+{#    var submitPaypalId = document.getElementById("submitPaypalId");
+    submitPaypalId.addEventListener("click", checkout, false);#}
+    
+    function checkout()
+    {
+        {#alert("qwertyuiop");#}
+        var product = document.getElementById("productPaypalId").value;
+        var price = document.getElementById("pricePaypalId").value;
+        
+        var form = $('#checkout-ajax');
+        var url = form.attr('action');
+        
+        $.post(url, {product: product, price: price}, function (data)
+        {
+            alert("checkout");
+        }).fail(function () {
+            alert('ERROR checkout');
+        });
+    }
+    
+    
+    {#checkoutAction#}
+    
+{#    window.onload = postPayment();
+    window.onload = getPaymentStatus();#}
+    
+    function postPayment()
+    {
+        {#enviamos nuestro pedido a paypal#}
+        var form = $('#post-payment-ajax');
+        var url = form.attr('action');
+
+        $.post(url, function (data)
+        {
+            {#alert("post-payment-ajax");#}
+        }).fail(function () {
+            alert('ERROR post-payment-ajax');
+        });
+    }
+    
+    function getPaymentStatus()
+    {
+        {#paypal redirecciona a esta ruta#}
+        var form = $('#get-payment-status-ajax');
+        var url = form.attr('action');
+
+        $.post(url, function (data)
+        {
+            {#alert("get-payment-status-ajax");#}
+        }).fail(function () {
+            alert('ERROR get-payment-status-ajax');
+        });
+    }
+    
+    
+    
+    
+</script>

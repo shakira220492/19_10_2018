@@ -1,0 +1,418 @@
+{{ form_start(get_artist_information_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'get-artist-information-ajax'|default('form')} }) }}
+{{ form_end(get_artist_information_form_ajax) }}
+
+{{ form_start(get_artist_list_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'get-artist-list-ajax'|default('form')} }) }}
+{{ form_end(get_artist_list_form_ajax) }}
+
+{{ form_start(get_artist_specific_list_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'get-artist-specific-list-ajax'|default('form')} }) }}
+{{ form_end(get_artist_specific_list_form_ajax) }}
+
+{{ form_start(show_specific_list_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'show-specific-list-ajax'|default('form')} }) }}
+{{ form_end(show_specific_list_form_ajax) }}
+
+<style>
+    #artistInformation {
+        position: absolute;
+{#        background-color: #1ab7ea;#}
+        top: 0px;
+        left: 0px;
+        width: 250px;
+        height: 120px;
+        {#overflow-y: scroll;#}
+        text-transform: uppercase;
+        font-size: smaller;
+    }
+    
+    #artistSpecificList {
+        position: absolute;
+{#        background-color: #ed1f3c;#}
+        top: 0px;
+        left: 250px;
+        right: 0px;
+        height: 120px;
+        overflow-y: scroll; 
+        overflow-x: hidden;
+        text-transform: uppercase;
+        font-size: smaller;
+    }
+    
+    #artistList {
+        position: absolute;
+{#        background-color: #DE3152;#}
+        top: 130px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+    }
+</style>
+
+<div id="artistInformation">
+
+    <div id="artistName" class="animatedButton">
+        Artist Name
+    </div>
+
+    <div id="artistFollowers" class="animatedButton">
+        Artist Followers
+    </div>
+
+    <div id="artistFollowing" class="animatedButton">
+        Artist Following
+    </div>
+
+    <div id="artistViews" class="animatedButton">
+        Artist Views
+    </div>
+
+    <div id="artistVideos" class="animatedButton">
+        Artist Videos
+    </div>
+
+    <div id="artistLists" class="animatedButton">
+        Artist Lists
+    </div>
+
+    <div id="artistEmail" class="animatedButton">
+        Artist Email
+    </div>
+
+    <div id="artistBiography" class="animatedButton">
+        Artist Biography
+    </div>
+    
+</div>
+
+<div id="artistSpecificList">
+    
+</div>
+
+<div id="artistList">
+    ARTIST LIST
+</div>
+
+<script>
+    window.onload = getArtistList();
+    window.onload = getArtistSpecificList();
+    window.onload = getArtistInformation();
+    
+    function getArtistList()
+    {
+        var form = $('#get-artist-list-ajax');
+        var url = form.attr('action');
+
+        $.post(url, function (data)
+        {
+            var artistList = document.getElementById("artistList");
+            artistList.style.display = "block";
+            artistList.style.overflow = "scroll";
+            artistList.style.color = "white";
+            artistList.innerHTML = "";
+            artistList.zIndex = "10";
+            
+            var amountVideos = data[0].amountVideos;
+            
+            for (i = 0; i < amountVideos; i++)
+            {
+                var videoId = data[i].videoId;
+                var videoName = data[i].videoName;
+                var videoDescription = data[i].videoDescription;
+                var videoImage = data[i].videoImage;
+                var videoContent = data[i].videoContent;
+                var videoUpdatedate = data[i].videoUpdatedate;
+                var videoAmountViews = data[i].videoAmountViews;
+                var videoAmountComments = data[i].videoAmountComments;
+                var videoLikes = data[i].videoLikes;
+                var videoDislikes = data[i].videoDislikes;
+                var userId = data[i].userId;
+                var userName = data[i].userName;
+                var amountVideos = data[i].amountVideos;
+                
+                var percentageLikes = (100 * videoLikes) / (videoLikes + videoDislikes);
+                var percentageDislikes = (100 * videoDislikes) / (videoLikes + videoDislikes);
+                
+                $("#artistList").append(
+                    "<div id='videoPortrait_Artist"+videoId+"' style='opacity:0.4; cursor: pointer;' "
+                        +"onclick='showVideo("+videoId+", \""+videoName+"\", \""+videoDescription+"\", \""+videoImage+"\", \""+videoContent+"\", \""+videoUpdatedate+"\", "+videoAmountViews+", "+videoAmountComments+", "+videoLikes+", "+videoDislikes+"), "
+                        +"updateVideoInformation(\""+videoName+"\", \""+userName+"\");' "
+                        +"onmouseover='highlightPortrait(\"videoPortrait_Artist"+videoId+"\");' "
+                        +"onmouseout='hidePortrait(\"videoPortrait_Artist"+videoId+"\");'>"
+
+                        +"<table border='0' width='100%'>"
+                        +"<tr height='100px'>"
+                            +"<td width='170px' height='100px'>"
+                                +"<div style='overflow:hidden; height:100px; width:170px; text-align:center; background-color: white;'>"
+                                    +"<img style='"
+                                    +"height:100%; cursor: pointer;"
+                                    +"opacity: 0.9; "
+                                    +"z-index: 1;' "
+                                    +"src='files/"+videoImage+"' "
+                                    +"alt='Mountain View'>"
+                                +"</div>"
+                            +"</td>"
+                            +"<td>"
+                                +"<div>"
+                                    +" <b>"+videoName+"</b><br>"
+                                    +" "+videoUpdatedate+"<br>"
+                                    +" "+videoAmountViews+" views<br>"
+                                    +" "+videoAmountComments+" comments<br>"
+                                    +" <div style='height: 5px; width: 100%;'>"
+                                        +"<div style='display: inline-block; height: 5px; width: "+percentageLikes+"%; background-color: blue; '></div>"
+                                        +"<div style='display: inline-block; height: 5px; width: "+percentageDislikes+"%; background-color: red; '></div>"
+                                    +" </div>"
+                                +"</div>"
+                            +"</td>"
+                        +"</tr>"
+                        +"</table>"
+                    +"</div>"
+                );
+              
+            }
+        }).fail(function () {
+            alert('ERROR get-artist-information-ajax');
+        });
+    }
+    
+    function getArtistSpecificList()
+    {
+        var form = $('#get-artist-specific-list-ajax');
+        var url = form.attr('action');
+
+        $.post(url, function (data)
+        {
+            var amountSpecificList = data[0].amountSpecificList;
+            
+            for (i = 0; i < amountSpecificList; i++)
+            {
+                var specificlistId = data[i].specificlistId;
+                var specificlistName = data[i].specificlistName;
+                
+                $("#artistSpecificList").append(
+                "<div id='specificlistId"+specificlistId+"' style='cursor: pointer; opacity:0.4;' onclick='showSpecificList("+specificlistId+");' onmouseover='highlightSpecificList("+specificlistId+");' onmouseout='hideSpecificList("+specificlistId+");'>"
+
+                    +"<table border='1' width='100%'  borderColor=white>"
+                    +"<tr height='20px'>"
+                        +"<td width='250px' height='20px'>"
+                            +"<div style='overflow:hidden; height:20px; width:250px; text-align:left;'>"
+                                +specificlistName
+                            +"</div>"
+                        +"</td>"
+                    +"</tr>"
+                    +"</table>"
+
+                +"</div>"
+                );
+                
+            }
+        }).fail(function () {
+            alert('ERROR');
+        });
+    }
+    
+    function getArtistInformation()
+    {
+        var form = $('#get-artist-information-ajax');
+        var url = form.attr('action');
+
+        $.post(url, function (data)
+        {
+            var userId = data[0].userId;
+            var userName = data[0].userName;
+            var userFirstgivenname = data[0].userFirstgivenname;
+            var userSecondgivenname = data[0].userSecondgivenname;
+            var userFirstfamilyname = data[0].userFirstfamilyname;
+            var userSecondfamilyname = data[0].userSecondfamilyname;
+            var userEmail = data[0].userEmail;
+            var userBiography = data[0].userBiography;
+            var amountFollowers = data[0].amountFollowers;
+            var amountInfluencers = data[0].amountInfluencers;
+            var amountVideos = data[0].amountVideos;
+            var amountLists = data[0].amountLists;
+            
+            var artistInformation = document.getElementById("artistInformation");
+            
+            var artistName = document.getElementById("artistName");
+            var artistFollowers = document.getElementById("artistFollowers");
+            var artistFollowing = document.getElementById("artistFollowing");
+            var artistVideos = document.getElementById("artistVideos");
+            var artistLists = document.getElementById("artistLists");
+            var artistEmail = document.getElementById("artistEmail");
+            var artistBiography = document.getElementById("artistBiography");
+            
+            artistName.innerHTML = userFirstgivenname+" "+userSecondgivenname+" "+userFirstfamilyname+" "+userSecondfamilyname;
+            artistFollowers.innerHTML = "Followers: "+amountFollowers;
+            artistFollowing.innerHTML = "Following: "+amountInfluencers;
+            artistVideos.innerHTML = "Videos: "+amountVideos;
+            artistLists.innerHTML = "Lists: "+amountLists;
+            artistEmail.innerHTML = "Email: "+userEmail;
+            artistBiography.innerHTML = "Biography: "+userBiography;
+            
+        }).fail(function () {
+            alert('ERROR... get-artist-list-ajax');
+        });
+    }
+    
+</script>
+
+<script>
+    
+    function showSpecificList(specificlistId)
+    {
+        var form = $('#show-specific-list-ajax');
+        var url = form.attr('action');
+
+        $.post(url, {specificlistId: specificlistId}, function (data)
+        {
+            var amountSpecificList = data[0].amountSpecificList;
+            
+            var artistList = document.getElementById("artistList");
+            artistList.style.display = "block";
+            artistList.style.overflow = "scroll";
+            artistList.style.color = "white";
+            artistList.innerHTML = "";
+            artistList.zIndex = "10";
+            
+            var amountSpecificList = data[0].amountSpecificList;
+            for (i = 0; i < amountSpecificList; i++)
+            {
+                var videoId = data[i].videoId;
+                var videoName = data[i].videoName;
+                var videoDescription = data[i].videoDescription;
+                var videoImage = data[i].videoImage;
+                var videoContent = data[i].videoContent;
+                var videoUpdatedate = data[i].videoUpdatedate;
+                var videoAmountViews = data[i].videoAmountViews;
+                var videoAmountComments = data[i].videoAmountComments;
+                var videoLikes = data[i].videoLikes;
+                var videoDislikes = data[i].videoDislikes;
+                var userName = data[i].userName;
+                var amountSpecificList = data[i].amountSpecificList;
+                
+                var percentageLikes = (100 * videoLikes) / (videoLikes + videoDislikes);
+                var percentageDislikes = (100 * videoDislikes) / (videoLikes + videoDislikes);
+                
+                $("#artistList").append(
+                    "<div id='videoPortrait"+videoId+"' style='opacity:0.4; cursor: pointer;' "
+                        +"onclick='showVideo("+videoId+", \""+videoName+"\", \""+videoDescription+"\", \""+videoImage+"\", \""+videoContent+"\", \""+videoUpdatedate+"\", "+videoAmountViews+", "+videoAmountComments+", "+videoLikes+", "+videoDislikes+"), "
+                        +"updateVideoInformation(\""+videoName+"\", \""+userName+"\");' "
+                        +"onmouseover='highlightPortrait("+videoId+");' "
+                        +"onmouseout='hidePortrait("+videoId+");'>"
+                    
+                        +"<table border='0' width='100%'>"
+                        +"<tr height='100px'>"
+                            +"<td width='170px' height='100px'>"
+                                +"<div style='overflow:hidden; height:100px; width:170px; text-align:center; background-color: white;'>"
+                                    +"<img style='"
+                                    +"height:100%; cursor: pointer;"
+                                    +"opacity: 0.9; "
+                                    +"z-index: 1;' "
+                                    +"src='files/"+videoImage+"' "
+                                    +"alt='Mountain View'>"
+                                +"</div>"
+                            +"</td>"
+                            +"<td>"
+                                +"<div>"
+                                    +" <b>"+videoName+"</b><br>"
+                                    +" "+videoUpdatedate+"<br>"
+                                    +" "+videoAmountViews+" views<br>"
+                                    +" "+videoAmountComments+" comments<br>"
+                                    +" <div style='height: 5px; width: 100%;'>"
+                                        +"<div style='display: inline-block; height: 5px; width: "+percentageLikes+"%; background-color: blue; '></div>"
+                                        +"<div style='display: inline-block; height: 5px; width: "+percentageDislikes+"%; background-color: red; '></div>"
+                                    +" </div>"
+                                +"</div>"
+                            +"</td>"
+                        +"</tr>"
+                        +"</table>"
+                    +"</div>"
+                );
+        
+            }
+            
+            if (amountSpecificList === 0)
+            {
+                document.getElementById("artistList").innerHTML = "There aren't videos that belong to this list.";
+            }
+            
+        }).fail(function () {
+            alert('ERROR get-artist-information-ajax');
+        });
+    }
+    
+    function highlightSpecificList(specificlistId)
+    {
+        var specificlistId = "specificlistId"+specificlistId;
+        document.getElementById(specificlistId).style.transitionProperty = "all";
+        document.getElementById(specificlistId).style.transitionDuration = "0.4s";
+        document.getElementById(specificlistId).style.opacity = 1;
+    }
+    
+    function hideSpecificList(specificlistId)
+    {
+        var specificlistId = "specificlistId"+specificlistId;
+        document.getElementById(specificlistId).style.transitionProperty = "all";
+        document.getElementById(specificlistId).style.transitionDuration = "0.4s";
+        document.getElementById(specificlistId).style.opacity = 0.4;
+    }
+    
+</script>
+
+<script>    
+    var artistName = document.getElementById("artistName");
+    var artistFollowers = document.getElementById("artistFollowers");
+    var artistFollowing = document.getElementById("artistFollowing");
+    var artistViews = document.getElementById("artistViews");
+    var artistVideos = document.getElementById("artistVideos");
+    var artistLists = document.getElementById("artistLists");
+    var artistEmail = document.getElementById("artistEmail");
+    var artistBiography = document.getElementById("artistBiography");
+
+    artistName.addEventListener("click", show_artistNameContent, false);
+    artistFollowers.addEventListener("click", show_artistFollowersContent, false);
+    artistFollowing.addEventListener("click", show_artistFollowingContent, false);
+    artistViews.addEventListener("click", show_artistViewsContent, false);
+    artistVideos.addEventListener("click", show_artistVideosContent, false);
+    artistLists.addEventListener("click", show_artistListsContent, false);
+    artistEmail.addEventListener("click", show_artistEmailContent, false);
+    artistBiography.addEventListener("click", show_artistBiographyContent, false);
+    
+    function show_artistNameContent()
+    {
+        alert("show_artistNameContent");
+    }
+    
+    function show_artistFollowersContent()
+    {
+        alert("show_artistFollowersContent");
+    }
+    
+    function show_artistFollowingContent()
+    {
+        alert("show_artistFollowingContent");
+    }
+    
+    function show_artistViewsContent()
+    {
+        alert("show_artistViewsContent");
+    }
+    
+    function show_artistVideosContent()
+    {
+        getArtistList();
+    }
+    
+    function show_artistListsContent()
+    {
+        alert("show_artistListsContent");
+    }
+    
+    function show_artistEmailContent()
+    {
+        alert("show_artistEmailContent");
+    }
+    
+    function show_artistBiographyContent()
+    {
+        alert("show_artistBiographyContent");
+    }
+    
+</script>

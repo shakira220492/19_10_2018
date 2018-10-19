@@ -1,0 +1,81 @@
+<div id='overIconButton' class='animatedButton'
+     style="position: absolute;
+     height: 30px;
+     width: 30px;
+     top: 60px;
+     z-index: 3;">
+    <img style='
+         width:30px; 
+         height:30px; 
+         opacity: 0.9;
+         z-index: 1;' 
+         src="files/images/icons/configuration/over.png" alt="Mountain View">
+</div>
+
+<script>
+    var overIconButton = document.getElementById('overIconButton');
+    overIconButton.addEventListener("click", showOverArea, false);
+    
+    window.onload = loadDisplaceIcon();
+    
+    function loadDisplaceIcon()
+    {
+        document.getElementById("displaceIcon").style.right = 670+"px";
+    }
+    
+    
+    function showOverArea(e)
+    {
+        currentValue22 = parseInt($(window).width()) - parseInt(document.getElementById("displaceIcon").style.right);
+        
+        if (size === "1")
+        {
+            {#alert(size);#}
+            document.getElementById('presentationArea').style.transitionProperty = "all";
+            document.getElementById('presentationArea').style.transitionDuration = 0.5 + "s";
+            document.getElementById('presentationArea').style.width = {#$(window).width() -#} currentValue22 + "px"; {#no me coje el currentValue22#}
+            
+            document.getElementById('playBanner').style.transitionProperty = "all";
+            document.getElementById('playBanner').style.transitionDuration = 0.5 + "s";
+            document.getElementById('playBanner').style.width = {#$(window).width() -#} currentValue22 + "px"; {#no me coje el currentValue22#}
+            
+            size = "2";
+        } else if (size === "2")
+        {
+            {#alert(size);#}
+            document.getElementById('presentationArea').style.transitionProperty = "all";
+            document.getElementById('presentationArea').style.transitionDuration = 0.5 + "s";
+            document.getElementById('presentationArea').style.width = $(window).width() - 280 + "px";
+            
+            document.getElementById('playBanner').style.transitionProperty = "all";
+            document.getElementById('playBanner').style.transitionDuration = 0.5 + "s";
+            document.getElementById('playBanner').style.width = $(window).width() - 280 + "px";
+            
+            size = "3";
+        } else if (size === "3")
+        {
+            {#alert(size);#}
+            document.getElementById('presentationArea').style.transitionProperty = "all";
+            document.getElementById('presentationArea').style.transitionDuration = 0.5 + "s";
+            document.getElementById('presentationArea').style.width = 100 + "%";
+            
+            document.getElementById('playBanner').style.transitionProperty = "all";
+            document.getElementById('playBanner').style.transitionDuration = 0.5 + "s";
+            document.getElementById('playBanner').style.width = 100 + "%";
+            
+            size = "4";
+        } else if (size === "4")
+        {
+            {#alert(size);#}
+            document.getElementById('presentationArea').style.transitionProperty = "all";
+            document.getElementById('presentationArea').style.transitionDuration = 0.5 + "s";
+            document.getElementById('presentationArea').style.width = $(window).width() - 280 + "px";
+            
+            document.getElementById('playBanner').style.transitionProperty = "all";
+            document.getElementById('playBanner').style.transitionDuration = 0.5 + "s";
+            document.getElementById('playBanner').style.width = $(window).width() - 280 + "px";
+            
+            size = "1";
+        }
+    }
+</script>

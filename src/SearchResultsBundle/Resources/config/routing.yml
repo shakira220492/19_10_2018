@@ -1,0 +1,3 @@
+search_results_homepage:
+    path:     /SearchResults
+    defaults: { _controller: SearchResultsBundle:Default:index }

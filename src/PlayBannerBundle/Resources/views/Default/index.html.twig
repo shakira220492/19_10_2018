@@ -1,0 +1,40 @@
+<div id="playBannerProgress"
+     style="background-color: #1ab7ea;
+     position: absolute;
+     height: 5px;
+     width: 100%; 
+     bottom: 40px;
+     left: 0px;
+     z-index: 4;
+     ">
+</div>
+
+<div
+    style="z-index: 2;
+    position: absolute;
+    width: 100%;
+    height: 10px;
+    justify-content: center;
+    display: flex;">
+    
+    <div
+        style="
+        position: absolute;
+        width: 180px;
+        height: 30px;">
+
+    {#icons' images' IMAGES OR VISIBLE CONTENT#}
+    {{ include('@PlayBanner/playBanner/iconImage/captions.html.twig') }}
+    {{ include('@PlayBanner/playBanner/iconImage/currentTime.html.twig') }}
+    {{ include('@PlayBanner/playBanner/iconImage/duration.html.twig') }}
+    {{ include('@PlayBanner/playBanner/iconImage/playPause.html.twig') }}
+    {{ include('@PlayBanner/playBanner/iconImage/totalScreen.html.twig') }}
+    {{ include('@PlayBanner/playBanner/iconImage/volume.html.twig') }}
+    {{ include('@PlayBanner/playBanner/iconImage/speed.html.twig') }}
+    
+    {{ include('@PlayBanner/playBanner/iconImage/next.html.twig') }}
+    {{ include('@PlayBanner/playBanner/iconImage/previous.html.twig') }}
+
+    </div>
+    
+</div>

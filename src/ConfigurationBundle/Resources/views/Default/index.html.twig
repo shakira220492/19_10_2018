@@ -1,0 +1,32 @@
+CONFIGURATION
+
+<div id="configurationBundle">
+    status Session
+</div>
+
+<script>
+    window.onload = prepareConfigurationBundle();
+
+    function prepareConfigurationBundle()
+    {
+        var form = $('#check-session-ajax');
+        var url = form.attr('action');
+
+        $.post(url, function (data)
+        {
+            var sessionStatus = data[0].sessionStatus;
+
+            if (sessionStatus === "0")
+            {
+                var configurationBundle = document.getElementById('configurationBundle');
+                configurationBundle.innerHTML = "configurationBundle... logout mode";
+            } else
+            {
+                var configurationBundle = document.getElementById('configurationBundle');
+                configurationBundle.innerHTML = "configurationBundle... login mode";
+            }
+        }).fail(function () {
+            alert('ERROR');
+        });
+    }
+</script>

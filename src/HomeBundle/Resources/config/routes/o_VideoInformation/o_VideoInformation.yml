@@ -1,0 +1,4 @@
+get_info_about_video_form:
+    path:     /getInfoAboutVideo
+    defaults: { _controller: VideoInformationBundle:Default:getInfoAboutVideo }
+    methods:  POST

@@ -1,0 +1,119 @@
+{{ form_start(get_info_about_video_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'get-info-about-video-ajax'|default('form')} }) }}
+{{ form_end(get_info_about_video_form_ajax) }}
+
+<style>
+    #songIconButton {
+        cursor: pointer;
+        color: white;
+        font-size: xx-large;
+        z-index: 11;
+        transition-property: all;
+        transition-duration: 1s;
+        position: relative;
+        white-space: nowrap;
+        text-transform: uppercase;
+    }
+
+    #artistIconButton {
+        cursor: pointer;
+        color: white;
+        font-size: x-large;
+        z-index: 11;
+        transition-property: all;
+        transition-duration: 1s;
+        position: relative;
+        opacity: 0.7;
+        white-space: nowrap;
+        text-transform: uppercase;
+    }
+
+    #songIconButton:hover, #artistIconButton:hover {
+        color: #1ab7ea;
+    }
+</style>
+
+<div id='songIconButton' class="animatedButton">
+    Name of the video - description-VideoBundle
+</div>
+
+<div id='artistIconButton' class="animatedButton">
+    Owner's video song - artist-VideoBundle
+</div>
+
+<script>
+    
+    var artistIconButton = document.getElementById('artistIconButton');
+    var songIconButton = document.getElementById('songIconButton');
+    
+    artistIconButton.addEventListener("click", show_artistIconContent, false);
+    songIconButton.addEventListener("click", show_songIconContent, false);
+    
+    function show_artistIconContent()
+    {
+        var artistIconContent = document.getElementById('artistIconContent');
+        
+        if (artistIconContent.style.display == "none")
+        {
+            clear_options();
+            artistIconContent.style.display = "block";
+        } else
+        {
+            artistIconContent.style.display = "none";
+        }
+    }
+    
+    function show_songIconContent()
+    {
+        var songIconContent = document.getElementById('songIconContent');
+        
+        if (songIconContent.style.display == "none")
+        {
+            clear_options();
+            songIconContent.style.display = "block";
+        } else
+        {
+            songIconContent.style.display = "none";
+        }
+    }
+    
+    window.onload = getInfoAboutTheVideo();
+
+    function getInfoAboutTheVideo()
+    {
+        var form = $('#get-info-about-video-ajax');
+        var url = form.attr('action');
+
+        var user_name = "USER NAME";
+        var user_password = "USER PASSWORD";
+
+        $.post(url, {user_name: user_name, user_password: user_password}, function (data)
+        {
+            var videoId = data[0].videoId;
+            var videoName = data[0].videoName;
+            var videoDescription = data[0].videoDescription;
+            var videoImage = data[0].videoImage;
+            var videoContent = data[0].videoContent;
+            var videoAmountViews = data[0].videoAmountViews;
+            var videoLikes = data[0].videoLikes;
+            var videoDislikes = data[0].videoDislikes;
+            var userId = data[0].userId;
+            var userName = data[0].userName;
+            var userEmail = data[0].userEmail;
+            var userPassword = data[0].userPassword;
+
+            var songIconButton = document.getElementById("songIconButton");
+            var artistIconButton = document.getElementById("artistIconButton");
+
+            songIconButton.innerHTML = videoName;
+            artistIconButton.innerHTML = userName;
+        
+{#            var currentVideo = "video" + product_id + "_" + product_name;
+            var currentProduct = document.getElementById(currentVideo);
+            currentProduct.playbackRate = 1.0;#}
+
+        }).fail(function () {
+            alert('ERROR... no funciona aun');
+        });
+    }
+    
+</script>

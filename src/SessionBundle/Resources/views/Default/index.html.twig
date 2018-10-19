@@ -1,0 +1,215 @@
+{{ form_start(get_task_properties_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'get-task-properties-ajax'|default('form')} }) }}
+{{ form_end(get_task_properties_form_ajax) }}
+
+{{ form_start(check_session_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'check-session-ajax'|default('form')} }) }}
+{{ form_end(check_session_form_ajax) }}
+
+{{ form_start(log_in_user_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'log-in-user-ajax'|default('form')} }) }}
+{{ form_end(log_in_user_form_ajax) }}
+
+{{ form_start(log_out_user_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'log-out-user-ajax'|default('form')} }) }}
+{{ form_end(log_out_user_form_ajax) }}
+
+{{ form_start(re_log_in_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 're-log-in-ajax'|default('form')} }) }}
+{{ form_end(re_log_in_form_ajax) }}
+
+{{ form_start(sign_up_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'sign-up-ajax'|default('form')} }) }}
+{{ form_end(sign_up_form_ajax) }}
+
+{{ form_start(get_city_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'get-city-ajax'|default('form')} }) }}
+{{ form_end(get_city_form_ajax) }}
+
+{{ form_start(get_country_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'get-country-ajax'|default('form')} }) }}
+{{ form_end(get_country_form_ajax) }}
+
+{{ form_start(upload_profile_photo_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'upload-profile-photo-ajax'|default('form')} }) }}
+{{ form_end(upload_profile_photo_form_ajax) }}
+
+{{ include('@Session/i_Session/logInUser.html.twig') }}
+{{ include('@Session/i_Session/logOutUser.html.twig') }}
+{{ include('@Session/i_Session/signUpUser.html.twig') }}
+
+<script>
+    var btnLogIn = document.getElementById("btnLogIn");
+    btnLogIn.addEventListener("click", logInUser, false);
+    
+    
+    var btnLogIn2 = document.getElementById("btnLogIn2");
+    btnLogIn2.addEventListener("click", reLogIn, false);
+    
+    
+    var btnLogOut = document.getElementById("btnLogOut");
+    btnLogOut.addEventListener("click", logOutUser, false);
+
+    window.onload = checkSession();
+
+    function checkSession()
+    {   
+        var form = $('#check-session-ajax');
+        var url = form.attr('action');
+
+        $.post(url, function (data)
+        {
+            var sessionStatus = data[0].sessionStatus;
+
+            if (sessionStatus === "0")
+            {   
+                showCloseSession(sessionStatus);
+            } else
+            {
+                var sessionStatus = data[0].sessionStatus;
+                var sessionId = data[0].sessionId;
+                var userName = data[0].userName;
+                var userFirstgivenname = data[0].userFirstgivenname;
+                var userSecondgivenname = data[0].userSecondgivenname;
+                var userFirstfamilyname = data[0].userFirstfamilyname;
+                var userSecondfamilyname = data[0].userSecondfamilyname;
+                var userEmail = data[0].userEmail;
+                var userPassword = data[0].userPassword;
+                var userBiography = data[0].userBiography;
+
+                showOpenSession(
+                        sessionStatus,
+                        sessionId,
+                        userName,
+                        userFirstgivenname,
+                        userSecondgivenname,
+                        userFirstfamilyname,
+                        userSecondfamilyname,
+                        userEmail,
+                        userPassword,
+                        userBiography
+                        );
+{#                return sessionStatus;#}
+            }
+        }).fail(function () {
+            alert('ERROR #check-session-ajax');
+        });
+    }
+
+    function showCloseSession(sessionStatus)
+    {
+        document.getElementById("btnLogOut").style.display = "none";
+        document.getElementById("infoAboutUser-sessionFrame").style.display = "none";
+
+        document.getElementById("logIn").style.display = "block";
+        document.getElementById("user_name").style.display = "block";
+        document.getElementById("user_password").style.display = "block";
+        
+        hide_profileIconContent();
+    }
+
+    function showOpenSession(
+            sessionStatus,
+            sessionId,
+            userName,
+            userFirstgivenname,
+            userSecondgivenname,
+            userFirstfamilyname,
+            userSecondfamilyname,
+            userEmail,
+            userPassword,
+            userBiography)
+    {
+        {#alert("showOpenSession");#}
+        
+        document.getElementById("logIn").style.display = "none";
+        document.getElementById("user_name").style.display = "none";
+        document.getElementById("user_password").style.display = "none";
+        
+        document.getElementById("infoAboutUser-sessionFrame").style.display = "block";
+        document.getElementById("btnLogOut").style.display = "block";
+
+        show_profileIconContent();
+
+        var infoAboutUser_session = document.getElementById("infoAboutUser-session");
+        infoAboutUser_session.innerHTML = "@" + userName + "<br>" +
+                userFirstgivenname + " " + userSecondgivenname + " " + userFirstfamilyname + " " + userSecondfamilyname + "<br>" +
+                userEmail;
+        
+        //METHODS THAT ARE AVAILABLE (VISIBLE) ONLY WHEN USER LOGIN... (NEVER WHEN WINDOW IS ONLOAD)
+        //-profileBundle (and its subBundles:  )
+        //    @ListBundle: Available only with login session (default option)... event cathed when user click on the icon
+        //    @EditProfile: Available only with login session... event cathed when user click on the icon
+        //    @DataminingBundle: Available only with login session... event cathed when user click on the icon
+        //    @HistoryBundle: Available only with login session... event cathed when user click on the icon
+        //    @UploadBundle: Available only with login session... event cathed when user click on the icon
+        //    @LyricsBundle:Available only with login session... event cathed when user click on the icon
+
+        // PROFILE BUNDLE
+        ProfileBundle();
+        ListBundle();
+        EditProfileBundle();
+        DataminingBundle();
+        HistoryBundle();
+    }
+
+    function logInUser()
+    {
+        var form = $('#log-in-user-ajax');
+        var url = form.attr('action');
+
+        var user_name = document.getElementById('user_name').value;
+        var user_password = document.getElementById('user_password').value;
+
+        if (!user_name || !user_password) {
+            alert("You need to introduce all information");
+        } else
+        {
+            $.post(url, {user_name: user_name, user_password: user_password}, function (data)
+            {
+                
+                var id = data[0].id;
+                var userName = data[0].userName;
+                var prueba123 = data[0].prueba123;
+                
+                alert("LOGIN: "+id+" - "+userName+" - "+prueba123);
+                
+                checkSession();
+            }).fail(function () {
+                alert('ERROR #log-in-user-ajax');
+            });
+        }
+    }
+
+    function logOutUser()
+    {
+        var form = $('#log-out-user-ajax');
+        var url = form.attr('action');
+
+        $.post(url, function (data)
+        {
+            document.getElementById("btnLogIn").style.display = "none";
+            document.getElementById("btnLogIn2").style.display = "block";
+            checkSession();
+        }).fail(function () {
+            alert('ERROR #log-out-user-ajax');
+        });
+    }
+    
+    function reLogIn()
+    {
+        var form = $('#re-log-in-ajax');
+        var url = form.attr('action');
+        var user_name = document.getElementById('user_name').value;
+        var user_password = document.getElementById('user_password').value;
+        if (!user_name || !user_password) {
+            alert("You need to introduce all information");
+        } else
+        {
+            $.post(url, {user_name: user_name, user_password: user_password}, function (data)
+            {
+                
+                var id = data[0].id;
+                var userName = data[0].userName;
+                var prueba123 = data[0].prueba123;
+                
+                {#alert("RE LOGIN: "+id+" - "+userName+" - "+prueba123);#}
+                
+                checkSession();
+            }).fail(function () {
+                alert('ERROR #re-log-in-ajax');
+            });
+        }
+    }
+</script>

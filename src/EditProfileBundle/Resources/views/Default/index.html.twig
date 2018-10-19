@@ -1,0 +1,838 @@
+{{ form_start(get_info_profile_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'get-info-profile-ajax'|default('form')} }) }}
+{{ form_end(get_info_profile_form_ajax) }}
+
+{{ form_start(get_video_list_profile_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'get-video-list-profile-ajax'|default('form')} }) }}
+{{ form_end(get_video_list_profile_form_ajax) }}
+
+{{ form_start(update_info_profile_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'update-info-profile-ajax'|default('form')} }) }}
+{{ form_end(update_info_profile_form_ajax) }}
+
+{{ form_start(edit_video_properties_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'edit-video-properties-ajax'|default('form')} }) }}
+{{ form_end(edit_video_properties_form_ajax) }}
+
+{{ form_start(get_video_keywords_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'get-video-keywords-ajax'|default('form')} }) }}
+{{ form_end(get_video_keywords_form_ajax) }}
+
+{{ form_start(delete_video_keywords_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'delete-video-keywords-ajax'|default('form')} }) }}
+{{ form_end(delete_video_keywords_form_ajax) }}
+
+{{ form_start(save_video_keywords_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'save-video-keywords-ajax'|default('form')} }) }}
+{{ form_end(save_video_keywords_form_ajax) }}
+
+<style>
+    #ContactInfoProfile {
+        position: absolute; 
+        top: 0px;
+        left: 0px;
+        height: 100px;
+        width: 100%;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        font-size: smaller
+    }
+    
+    #VideoListProfile {
+        position: absolute; 
+        top: 120px;
+        width: 100%;
+    }
+    
+    .keywordEnvironmentToEdit {
+        display:inline-block;
+    }
+
+    .inputKeywordToEdit {
+        display: inline-block;
+        color: black;
+    }
+    
+    .deleteKeywordToEdit {
+        display: inline-block;
+        color: black;
+        background-color: white;
+        height: 20px;
+        width: 20px;
+        cursor: pointer;
+    }
+    
+</style>
+
+<div id="EditProfileBundle">
+    
+    <div id="ContactInfoProfile" class="animatedButton">
+    </div>
+    <div id="VideoListProfile">
+    </div>
+    
+</div>
+
+<script>
+    
+    function EditProfileBundle()
+    {
+        getInfoProfile();
+        getVideoListProfile();
+    }
+    
+    
+    function getInfoProfile()
+    {
+        var form = $('#get-info-profile-ajax');
+        var url = form.attr('action');
+
+        $.post(url, function (data)
+        {
+            var userId = data[0].userId;
+            var userName = data[0].userName;
+            var userFirstgivenname = data[0].userFirstgivenname;
+            var userSecondgivenname = data[0].userSecondgivenname;
+            var userFirstfamilyname = data[0].userFirstfamilyname;
+            var userSecondfamilyname = data[0].userSecondfamilyname;
+            var userEmail = data[0].userEmail;
+            var userBiography = data[0].userBiography;
+            
+            var ContactInfoProfile = document.getElementById("ContactInfoProfile");
+            ContactInfoProfile.innerHTML = 
+                    "USERNAME: "+userName+"<br>"+
+                    userFirstgivenname+" "+userSecondgivenname+" "+userFirstfamilyname+" "+userSecondfamilyname+"<br>"+
+                    "EMAIL: "+userEmail+"<br><br>"+
+                    "ABOUT ME: "+userBiography+"<br>";
+            
+        }).fail(function () {
+            alert('ERROR #get-info-profile-ajax');
+        });
+    }
+    
+    function getVideoListProfile()
+    {
+        var form = $('#get-video-list-profile-ajax');
+        var url = form.attr('action');
+
+        $.post(url, function (data)
+        {
+            var amountVideos = data[0].amountVideos;
+            
+            for (i = 0; i < amountVideos; i++)
+            {
+                var videoId = data[i].videoId;
+                var videoName = data[i].videoName;
+                var videoDescription = data[i].videoDescription; //
+                var videoImage = data[i].videoImage; 
+                var videoContent = data[i].videoContent; //
+                var videoUpdatedate = data[i].videoUpdatedate;
+                var videoAmountViews = data[i].videoAmountViews;
+                var videoAmountComments = data[i].videoAmountComments;
+                var videoLikes = data[i].videoLikes;
+                var videoDislikes = data[i].videoDislikes;
+                var userId = data[i].userId;
+                var userName = data[i].userName;
+                var amountVideos = data[i].amountVideos;
+                
+                var percentageLikes = (100 * videoLikes) / (videoLikes + videoDislikes);
+                var percentageDislikes = (100 * videoDislikes) / (videoLikes + videoDislikes);
+                
+                $("#VideoListProfile").append(
+                    "<div id='videoPortrait_Profile"+videoId+"' style='opacity:0.4; cursor: pointer;' onclick='editVideoProperties("+videoId+", \""+videoImage+"\", \""+videoName+"\", \""+videoDescription+"\"), updateVideoInformation(\""+videoName+"\", \""+userName+"\");' onmouseover='highlightPortrait(\"videoPortrait_Profile"+videoId+"\");' onmouseout='hidePortrait(\"videoPortrait_Profile"+videoId+"\");'>"
+
+                        +"<table border='0' width='100%'>"
+                        +"<tr height='100px'>"
+                            +"<td width='170px' height='100px'>"
+                                +"<div style='overflow:hidden; height:100px; width:170px; text-align:center; background-color: white;'>"
+                                    +"<img style='"
+                                    +"height:100%; cursor: pointer;"
+                                    +"opacity: 0.9; "
+                                    +"z-index: 1;' "
+                                    +"src='files/"+videoImage+"' "
+                                    +"alt='Mountain View'>"
+                                +"</div>"
+                            +"</td>"
+                            +"<td>"
+                                +"<div>"
+                                    +" <b>"+videoName+"</b><br>"
+                                    +" "+videoUpdatedate+"<br>"
+                                    +" "+videoAmountViews+" views<br>"
+                                    +" "+videoAmountComments+" comments<br>"
+                                    +" <div style='height: 5px; width: 100%;'>"
+                                        +"<div style='display: inline-block; height: 5px; width: "+percentageLikes+"%; background-color: blue; '></div>"
+                                        +"<div style='display: inline-block; height: 5px; width: "+percentageDislikes+"%; background-color: red; '></div>"
+                                    +" </div>"
+                                +"</div>"
+                            +"</td>"
+                        +"</tr>"
+                        +"</table>"
+                    +"</div>"
+                );
+              
+            }
+            
+        }).fail(function () {
+            alert('ERROR: #get-video-list-profile-ajax');
+        });
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////
+    
+    var ContactInfoProfile = document.getElementById("ContactInfoProfile");
+    ContactInfoProfile.addEventListener("click", editInfoProfile, false);
+    
+    function editInfoProfile()
+    {
+        var respectlyFormId = document.getElementById("emergentWindow");
+
+        respectlyFormId.style.width = "100%";
+        respectlyFormId.style.height = "100%";
+        respectlyFormId.style.opacity = "0.9";
+        respectlyFormId.style.zIndex = "20";
+        respectlyFormId.style.position = "absolute";
+        respectlyFormId.style.color = "white";
+        respectlyFormId.style.backgroundColor = "gray";
+        respectlyFormId.style.overflowY = "scroll";
+        
+        respectlyFormId.innerHTML = 
+        "<center>"+
+        
+        "<table width='600px' border='0'>"+
+        
+            "<tr>"+
+                "<td colspan='2' align='right'>"+
+                "<div id='close_profileInput' style='cursor:pointer; background-color:red; padding:5px; opacity: 0.5; color: white; width:40px; height:30px;'><center>X</center></div>"+
+                "</td>"+
+            "</tr>"+
+        
+            "<tr height='40px'>"+
+                "<td>"+
+                    "Username: "+
+                "</td>"+
+                "<td>"+
+                
+                    "<input type='text' id='userName_profileInput' placeholder='' name='userId_profileInput'"+
+                    "style='width: 100%;"+
+                    "height: 30px;"+
+                    "background-color: white;"+
+                    "color: gray;"+
+                    "border: 0;"+
+                    "text-transform: uppercase;"+
+                    "align-content: center;'/>"+
+                
+                "</td>"+
+            "</tr>"+
+            
+            "<tr height='40px'>"+
+                "<td>"+
+                    "First given name: "+
+                "</td>"+
+                "<td>"+
+
+                    "<input type='text' id='userFirstgivenname_profileInput' placeholder='' name='userFirstgivenname_profileInput'"+
+                    "style='width: 100%;"+
+                    "height: 30px;"+
+                    "background-color: white;"+
+                    "color: gray;"+
+                    "border: 0;"+
+                    "text-transform: uppercase;"+
+                    "align-content: center;'/>"+
+            
+                "</td>"+
+            "</tr>"+
+            
+            "<tr height='40px'>"+
+                "<td>"+
+                    "Second given name: "+
+                "</td>"+
+                "<td>"+
+
+                    "<input type='text' id='userSecondgivenname_profileInput' placeholder='' name='userSecondgivenname_profileInput'"+
+                    "style='width: 100%;"+
+                    "height: 30px;"+
+                    "background-color: white;"+
+                    "color: gray;"+
+                    "border: 0;"+
+                    "text-transform: uppercase;"+
+                    "align-content: center;'/>"+
+            
+                "</td>"+
+            "</tr>"+
+            
+            "<tr height='40px'>"+
+                "<td>"+
+                    "First family name: "+
+                "</td>"+
+                "<td>"+
+
+                    "<input type='text' id='userFirstfamilyname_profileInput' placeholder='' name='userFirstfamilyname_profileInput'"+
+                    "style='width: 100%;"+
+                    "height: 30px;"+
+                    "background-color: white;"+
+                    "color: gray;"+
+                    "border: 0;"+
+                    "text-transform: uppercase;"+
+                    "align-content: center;'/>"+
+            
+                "</td>"+
+            "</tr>"+
+            
+            "<tr height='40px'>"+
+                "<td>"+
+                    "Second family name: "+
+                "</td>"+
+                "<td>"+
+                
+                    "<input type='text' id='userSecondfamilyname_profileInput' placeholder='' name='userSecondfamilyname_profileInput'"+
+                    "style='width: 100%;"+
+                    "height: 30px;"+
+                    "background-color: white;"+
+                    "color: gray;"+
+                    "border: 0;"+
+                    "text-transform: uppercase;"+
+                    "align-content: center;'/>"+
+                
+                "</td>"+
+            "</tr>"+
+            
+            "<tr height='40px'>"+
+                "<td>"+
+                    "User email: "+ 
+                "</td>"+
+                "<td>"+
+
+                    "<input type='text' id='userEmail_profileInput' placeholder='' name='userEmail_profileInput'"+
+                    "style='width: 100%;"+
+                    "height: 30px;"+
+                    "background-color: white;"+
+                    "color: gray;"+
+                    "border: 0;"+
+                    "text-transform: uppercase;"+
+                    "align-content: center;'/>"+
+            
+                "</td>"+
+            "</tr>"+
+                        
+            "<tr height='240px'>"+
+                "<td height='240px'>"+
+                    "User biography: "+
+                "</td>"+
+                "<td height='240px'>"+
+            
+                    "<textarea "+
+                    "id='userBiography_profileInput' name='userBiography_profileInput' "+
+                    "style='"+
+                    "height: 100%;"+
+                    "width: 100%;"+
+                    "color: gray;"+
+                    "resize: none;"+
+                    "overflow-y: scroll;' "+
+                    "></textarea>"+
+            
+                "</td>"+
+            "</tr>"+
+            
+            "<tr height='40px'>"+
+                "<td colspan='2'>"+
+                
+                "<center>"+
+                    "<div id='save_editProfile' style='cursor:pointer; background-color:blue; padding:5px; opacity: 0.5; width:60px; height:30px;'>"+
+                    "SAVE"+
+                    "</div>"+
+                "</center>"+
+
+                
+                "</td>"+
+            "</tr>"+
+            
+        "</table>"+
+        
+        "</center>";
+                
+        $('#close_profileInput').click(function () {
+        var respectlyFormId = document.getElementById("emergentWindow");
+
+            respectlyFormId.style.width = "100%";
+            respectlyFormId.style.height = "100%";
+            respectlyFormId.style.opacity = "0";
+            respectlyFormId.style.zIndex = "1";
+            respectlyFormId.style.position = "absolute";
+
+            respectlyFormId.innerHTML = "";
+        });
+        
+        $('#save_editProfile').click(function () {
+
+            var userName_value = document.getElementById("userName_profileInput").value;
+            var userFirstgivenname_value = document.getElementById("userFirstgivenname_profileInput").value;
+            var userSecondgivenname_value = document.getElementById("userSecondgivenname_profileInput").value;
+            var userFirstfamilyname_value = document.getElementById("userFirstfamilyname_profileInput").value;
+            var userSecondfamilyname_value = document.getElementById("userSecondfamilyname_profileInput").value;
+            var userEmail_value = document.getElementById("userEmail_profileInput").value;
+            var userBiography_value = document.getElementById("userBiography_profileInput").value;
+            
+            updateInfoProfile(
+                userName_value,
+                userFirstgivenname_value,
+                userSecondgivenname_value,
+                userFirstfamilyname_value,
+                userSecondfamilyname_value,
+                userEmail_value,
+                userBiography_value
+            );
+
+            respectlyFormId.style.width = "100%";
+            respectlyFormId.style.height = "100%";
+            respectlyFormId.style.opacity = "0";
+            respectlyFormId.style.zIndex = "1";
+            respectlyFormId.style.position = "absolute";
+            respectlyFormId.innerHTML = "";
+        });
+        
+        var form = $('#get-info-profile-ajax');
+        var url = form.attr('action');
+
+        $.post(url, function (data)
+        {
+            var userId = data[0].userId;
+            var userName = data[0].userName;
+            var userFirstgivenname = data[0].userFirstgivenname;
+            var userSecondgivenname = data[0].userSecondgivenname;
+            var userFirstfamilyname = data[0].userFirstfamilyname;
+            var userSecondfamilyname = data[0].userSecondfamilyname;
+            var userEmail = data[0].userEmail;
+            var userBiography = data[0].userBiography;
+            
+            var userName_profileInput = document.getElementById("userName_profileInput");
+            var userFirstgivenname_profileInput = document.getElementById("userFirstgivenname_profileInput");
+            var userSecondgivenname_profileInput = document.getElementById("userSecondgivenname_profileInput");
+            var userFirstfamilyname_profileInput = document.getElementById("userFirstfamilyname_profileInput");
+            var userSecondfamilyname_profileInput = document.getElementById("userSecondfamilyname_profileInput");
+            var userEmail_profileInput = document.getElementById("userEmail_profileInput");
+            var userBiography_profileInput = document.getElementById("userBiography_profileInput");
+            
+            userName_profileInput.value = userName;
+            userFirstgivenname_profileInput.value = userFirstgivenname;
+            userSecondgivenname_profileInput.value = userSecondgivenname;
+            userFirstfamilyname_profileInput.value = userFirstfamilyname;
+            userSecondfamilyname_profileInput.value = userSecondfamilyname;
+            userEmail_profileInput.value = userEmail;
+            userBiography_profileInput.value = userBiography;
+            
+        }).fail(function () {
+            alert('GET INFO PROFILE ERROR');
+        });
+    }
+    
+    function updateInfoProfile(
+                userName_value,
+                userFirstgivenname_value,
+                userSecondgivenname_value,
+                userFirstfamilyname_value,
+                userSecondfamilyname_value,
+                userEmail_value,
+                userBiography_value
+            )
+    {
+        var form = $('#update-info-profile-ajax');
+        var url = form.attr('action');
+
+        $.post(url, {
+            userName_value: userName_value,
+            userFirstgivenname_value: userFirstgivenname_value,
+            userSecondgivenname_value: userSecondgivenname_value,
+            userFirstfamilyname_value: userFirstfamilyname_value,
+            userSecondfamilyname_value: userSecondfamilyname_value,
+            userEmail_value: userEmail_value,
+            userBiography_value: userBiography_value
+        }, function (data)
+        {
+            
+            var ContactInfoProfile = document.getElementById("ContactInfoProfile");
+            ContactInfoProfile.innerHTML = 
+                    "USERNAME: "+userName_value+"<br>"+
+                    userFirstgivenname_value+" "+userSecondgivenname_value+" "+userFirstfamilyname_value+" "+userSecondfamilyname_value+"<br>"+
+                    "EMAIL: "+userEmail_value+"<br><br>"+
+                    "ABOUT ME: "+userBiography_value+"<br>";
+        
+        }).fail(function () {
+            alert('UPDATE INFO PROFILE ERROR');
+        });
+        
+    }
+    
+    function getVideoKeywords(video_Id)
+    {
+        var form = $('#get-video-keywords-ajax');
+        var url = form.attr('action');
+        
+        var keywords_editVideoProperties = document.getElementById("keywords_editVideoProperties");
+        keywords_editVideoProperties.innerHTML = "";
+        $.post(url, {video_Id: video_Id}, function (data)
+        {
+
+            var amountKeywords = data[0].amountKeywords;
+            
+            for (i = 0; i < amountKeywords; i++)
+            {
+                var keywordId = data[i].keywordId;
+                var keywordContent = data[i].keywordContent;
+                
+                $("#keywords_editVideoProperties").append(
+                    "<div class='keywordEnvironmentToEdit' id='keywordEnvironmentToEdit" + keywordId + "'>"+
+                        "<input class='inputKeywordToEdit' "+
+                               "type='text'"+
+                               "value='"+keywordContent+"'"+
+                               "size='10' readonly='readonly'/> "+
+                        "<div class='deleteKeywordToEdit' onclick='deleteVideoKeywords(\"keywordEnvironmentToEdit"+keywordId+"\", "+keywordId+", "+video_Id+");'> "+
+                            "<center>X</center> "+
+                        "</div> "+
+                    "</div> "
+                );
+            }
+            
+        }).fail(function () {
+            alert('ERROR getVideoKeywords');
+        });
+    }
+    
+    function deleteVideoKeywords(environmentId, keywordId, videoId)
+    {
+        var form = $('#delete-video-keywords-ajax');
+        var url = form.attr('action');
+        
+        amountCurrentKeywords--;
+        
+        var respectly = environmentId;
+        var respectlyId = document.getElementById(respectly);
+        respectlyId.style.display = "none";
+        
+        $.post(url, {keywordId: keywordId, videoId: videoId}, function (data)
+        {
+            {#alert("deleteVideoKeywords");#}
+        }).fail(function () {
+            alert('ERROR deleteVideoKeywords');
+        });
+    }
+    
+    function saveVideoKeywords(videoId)
+    {
+        var form = $('#save-video-keywords-ajax');
+        var url = form.attr('action');
+
+        var newKeywordToTheVideo = document.getElementById("newKeywordToTheVideo").value;
+        {#alert(newKeywordToTheVideo + " ... " + videoId);#}
+
+        $.post(url, {newKeywordToTheVideo: newKeywordToTheVideo, videoId: videoId}, function (data)
+        {
+            var video_Id = videoId;
+            var keywordId = data[0].keywordId;
+            var keywordContent = data[0].keywordContent;
+    
+            $("#keywords_editVideoProperties").append(
+                "<div class='keywordEnvironmentToEdit' id='keywordEnvironmentToEdit" + keywordId + "'>"+
+                    "<input class='inputKeywordToEdit' "+
+                           "type='text'"+
+                           "value='"+keywordContent+"'"+
+                           "size='10' readonly='readonly'/> "+
+                    "<div class='deleteKeywordToEdit' onclick='deleteVideoKeywords(\"keywordEnvironmentToEdit"+keywordId+"\", "+keywordId+", "+video_Id+");'> "+
+                        "<center>X</center> "+
+                    "</div> "+
+                "</div> "
+            );
+
+            alert("saveVideoKeywords... "+keywordId+" ... "+keywordContent+".");
+        }).fail(function () {
+            alert('ERROR saveVideoKeywords');
+        });
+    }
+    
+    function editVideoProperties(videoId, videoImage, videoName, videoDescription)
+    {
+        var respectlyFormId = document.getElementById("emergentWindow");
+
+        respectlyFormId.style.width = "100%";
+        respectlyFormId.style.height = "100%";
+        respectlyFormId.style.opacity = "0.9";
+        respectlyFormId.style.zIndex = "20";
+        respectlyFormId.style.position = "absolute";
+        respectlyFormId.style.color = "white";
+        respectlyFormId.style.backgroundColor = "gray";
+        respectlyFormId.style.overflowY = "scroll";
+        
+        respectlyFormId.innerHTML = 
+        "<center>"+
+        
+        "<form id='editVideoProperties_form'>"+
+        
+        "<table width='600px' border='1'>"+
+        
+            "<tr>"+
+                "<td colspan='2' align='right'>"+
+                "<div style='background-color:white; padding:5px; opacity: 0.5; color: gray; width:100%; height:30px;'>"+
+                    "<center>EDIT VIDEO'S PROPERTIES</center>"+
+                "</div>"+
+                "</td>"+
+            "</tr>"+
+            
+            "<tr>"+
+                "<td colspan='2' align='right'>"+
+                "<div id='close_editVideoProperties' style='cursor:pointer; background-color:red; padding:5px; opacity: 0.5; color: white; width:40px; height:30px;'><center>X</center></div>"+
+                "</td>"+
+            "</tr>"+
+        
+            "<tr>"+
+                "<td colspan='2'>"+
+                    "<hr>"+
+                "</td>"+
+            "</tr>"+
+        
+            "<tr height='40px'>"+
+                "<td>"+
+                    "Video's Name: "+
+                "</td>"+
+                "<td>"+
+                
+                    "<input type='text' id='videoName_editVideoProperties' placeholder='' name='videoName_editVideoProperties'"+
+                    "style='width: 100%;"+
+                    "height: 30px;"+
+                    "background-color: white;"+
+                    "color: gray;"+
+                    "border: 0;"+
+                    "text-transform: uppercase;"+
+                    "align-content: center;' value='"+videoName+"'/>"+
+                
+                    "<input type='text' id='videoId_editVideoProperties' name='videoId_editVideoProperties'"+
+                    "style='"+
+                    "display: none; "+
+                    "' value='"+videoId+"'/>"+
+                
+                "</td>"+
+            "</tr>"+
+            
+            "<tr>"+
+                "<td colspan='2'>"+
+                    "<hr>"+
+                "</td>"+
+            "</tr>"+
+            
+            "<tr height='140px'>"+
+            
+                "<td>"+
+                    "Video description: "+
+                "</td>"+
+                "<td>"+
+                    "<textarea "+
+                    "id='videoDescription_editVideoProperties' name='videoDescription_editVideoProperties' "+
+                    "style='"+
+                    "height: 140px;"+
+                    "width: 100%;"+
+                    "color: gray;"+
+                    "resize: none;"+
+                    "overflow-y: scroll;' "+
+                    ">"+videoDescription+"</textarea>"+
+                "</td>"+
+            "</tr>"+
+            
+            "<tr>"+
+                "<td colspan='2'>"+
+                    "<hr>"+
+                "</td>"+
+            "</tr>"+
+            
+            "<tr>"+
+                "<td colspan='2'>"+
+                                
+                    "<div id='newPortrait_editVideoProperties' style='overflow:hidden; height:300px; width:600px; text-align:center; background-color: white;'>"+
+                        "<img style='"+
+                        "height:100%;"+
+                        "opacity: 0.9; "+
+                        "z-index: 1;' "+
+                        "src='"+videoImage+"' "+
+                        "alt='Mountain View'>"+
+                    "</div>"+
+                
+                "</td>"+
+            "</tr>"+
+            
+            "<tr height='40px'>"+
+                "<td>"+
+                    "New Video's portrait: "+
+                "</td>"+
+                "<td>"+
+                
+                    "<input type='file' "+
+                    "name='portrait_editVideoProperties' "+
+                    "id='portrait_editVideoProperties'/>"+
+                
+                "</td>"+
+            "</tr>"+
+            
+
+            "<tr>"+
+                "<td colspan='2'>"+
+                    "<hr>"+
+                "</td>"+
+            "</tr>"+
+
+            "<tr>"+
+                "<td colspan='2'>"+
+                    "In the next input write the new keyword you want to the video: &nbsp"+
+                    
+                    "<input class='inputKeyword' "+
+                    "type='text' "+
+                    "id='newKeywordToTheVideo' style='color: gray;'"+
+                    "name='newKeyword' "+
+                    "size='10'/> &nbsp"+
+                    
+                    "<div class='basicButton' onclick='saveVideoKeywords("+videoId+");' >"+
+                        "+"+
+                    "</div>"+
+                    
+                "</td>"+
+            "<tr>"+
+
+            "<tr>"+
+                "<td>"+
+                    "Keywords: "+
+                "</td>"+
+                "<td>"+
+                
+                    "<div id='keywords_editVideoProperties' "+
+                    "style='overflow:scroll; height:150px; width:100%; text-align:center;'>"+
+                        "keywords... "+
+                    "</div>"+
+                
+                "</td>"+
+            "</tr>"+
+
+            "<tr>"+
+                "<td colspan='2'>"+
+                    "<hr>"+
+                "</td>"+
+            "</tr>"+
+
+            "<tr height='40px'>"+
+                "<td colspan='2'>"+
+                
+                "<center>"+
+                    "<div id='save_editVideoProperties' "+
+                    "style='cursor:pointer; background-color:blue; padding:5px; opacity: 0.5; width:60px; height:30px;'>"+
+                    "SAVE"+
+                    "</div>"+
+                "</center>"+
+
+                "</td>"+
+            "</tr>"+
+            
+        "</table>"+
+        
+        "</form>"+
+        
+        "</center>";
+                
+        $("#portrait_editVideoProperties").change(function () {
+            var reader = new FileReader();
+            reader.readAsDataURL(this.files[0]);
+            reader.onload = function (e) {
+            document.getElementById("newPortrait_editVideoProperties").innerHTML = ['<img class="thumb" src="', e.target.result, '"/>'].join('');
+            };
+        });
+                
+        $('#close_editVideoProperties').click(function () {
+        var respectlyFormId = document.getElementById("emergentWindow");
+
+            respectlyFormId.style.width = "100%";
+            respectlyFormId.style.height = "100%";
+            respectlyFormId.style.opacity = "0";
+            respectlyFormId.style.zIndex = "1";
+            respectlyFormId.style.position = "absolute";
+
+            respectlyFormId.innerHTML = "";
+        });
+        
+        $('#save_editVideoProperties').click(function () {
+            sendNewDataInfo(videoId);
+
+            respectlyFormId.style.width = "100%";
+            respectlyFormId.style.height = "100%";
+            respectlyFormId.style.opacity = "0";
+            respectlyFormId.style.zIndex = "1";
+            respectlyFormId.style.position = "absolute";
+            respectlyFormId.innerHTML = "";
+        });
+        
+        getVideoKeywords(videoId);
+    }
+    
+    function sendNewDataInfo(videoId)
+    {
+        var form = $('#edit-video-properties-ajax');
+        var url = form.attr('action');
+        
+        videoName_editVideoProperties = document.getElementById("videoName_editVideoProperties").value;
+        portrait_editVideoProperties = document.getElementById("portrait_editVideoProperties").value;
+        
+        if (!videoName_editVideoProperties || !portrait_editVideoProperties) {
+            alert("You need to introduce all information");
+        } else {
+
+            var formData = new FormData($("#editVideoProperties_form")[0]);
+            var a = 2;
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false
+            }).done(function (resp) {
+    
+                var videoId = resp[0].videoId;
+                var videoName = resp[0].videoName;
+                var videoDescription = resp[0].videoDescription;
+                var videoImage = resp[0].videoImage;
+                var videoContent = resp[0].videoContent;
+                var videoUpdatedate = resp[0].videoUpdatedate;
+                var videoAmountViews = resp[0].videoAmountViews;
+                var videoAmountComments = resp[0].videoAmountComments;
+                var videoLikes = resp[0].videoLikes;
+                var videoDislikes = resp[0].videoDislikes;
+                var user = resp[0].user;
+                
+                var percentageLikes = (100 * videoLikes) / (videoLikes + videoDislikes);
+                var percentageDislikes = (100 * videoDislikes) / (videoLikes + videoDislikes);
+                
+                var videoPortraitId = "videoPortrait_Profile"+videoId;
+                
+                var respectly_videoPortrait = document.getElementById(videoPortraitId);
+                
+                respectly_videoPortrait.innerHTML = 
+                    "<div id='videoPortrait_Profile"+videoId+"' style='cursor: pointer;' onclick='editVideoProperties("+videoId+", \""+videoImage+"\");' onmouseover='highlightPortrait(\"videoPortrait_Profile"+videoId+"\");' onmouseout='hidePortrait(\"videoPortrait_Profile"+videoId+"\");'>"
+
+                        +"<table border='0' width='100%'>"
+                        +"<tr height='100px'>"
+                            +"<td width='170px' height='100px'>"
+                                +"<div style='overflow:hidden; height:100px; width:170px; text-align:center; background-color: white;'>"
+                                    +"<img style='"
+                                    +"height:100%; cursor: pointer;"
+                                    +"z-index: 1;' "
+                                    +"src='"+videoImage+"' "
+                                    +"alt='Mountain View'>"
+                                +"</div>"
+                            +"</td>"
+                            +"<td>"
+                                +"<div>"
+                                    +" <b>"+videoName+"</b><br>"
+                                    +" "+videoUpdatedate+"<br>"
+                                    +" "+videoAmountViews+" views<br>"
+                                    +" "+videoAmountComments+" comments<br>"
+                                    +" <div style='height: 5px; width: 100%;'>"
+                                        +"<div style='display: inline-block; height: 5px; width: "+percentageLikes+"%; background-color: blue; '></div>"
+                                        +"<div style='display: inline-block; height: 5px; width: "+percentageDislikes+"%; background-color: red; '></div>"
+                                    +" </div>"
+                                +"</div>"
+                            +"</td>"
+                        +"</tr>"
+                        +"</table>"
+                    +"</div>";
+            });
+        }
+    }
+    
+</script>

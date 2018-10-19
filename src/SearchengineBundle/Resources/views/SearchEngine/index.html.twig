@@ -1,0 +1,157 @@
+<div style="
+{#     background-color: black; #}
+     position: absolute;
+     top: 0px;
+     width: 100%;
+     height: 30px;">
+    <input type="text" id="searchEngineMachine" placeholder="JBSB92" name="keyword"/>
+</div>
+
+<div id='searchIconButton' class="searchProduct animatedButton" style="
+     background-color: #1ab7ea; 
+     position: absolute;
+     top: 0px;
+     right: 0px;
+     width: 30px;
+     height: 30px;">
+        <img style='
+         width:30px; 
+         height:30px; 
+         opacity: 0.9;' 
+         src="files/images/icons/presentation/search.png" alt="Mountain View">
+</div>
+
+<script>
+    var searchEngineMachine = document.getElementById("searchEngineMachine");
+    searchEngineMachine.addEventListener("keyup", searchByEnter, false);
+    
+    function searchByEnter(e)
+    {
+        if (e.keyCode === 13)
+        {
+            storeCurrentKeywords();
+            manageKeyword();
+        }
+    }
+    
+    var searchIconButton = document.getElementById('searchIconButton');
+    searchIconButton.addEventListener("click", storeCurrentKeywords, false);
+    searchIconButton.addEventListener("click", manageKeyword, false);
+    
+    function storeCurrentKeywords()
+    {
+        var form = $('#store-current-keywords-ajax');
+        var url = form.attr('action');
+
+        var keyword = document.getElementById('searchEngineMachine').value;
+        
+        $.post(url, {keyword: keyword
+        }, function (data)
+        {
+		
+        }).fail(function () {
+            alert('ERROR');
+        });
+    }
+
+    function manageKeyword()
+    {
+        var form = $('#search-keyword-ajax');
+
+        var url = form.attr('action');
+
+        var keyword = document.getElementById('searchEngineMachine').value;
+
+        $.post(url, {keyword: keyword
+        }, function (result) {
+
+            var amountVideos = result[0].amountVideos;
+            
+            var searchIconContent = document.getElementById("searchIconContent");
+            searchIconContent.style.display = "block";
+            searchIconContent.style.color = "white";
+            searchIconContent.innerHTML = "";
+            searchIconContent.zIndex = "10";
+            
+            for (i = 0; i < amountVideos; i++)
+            {
+                var videoId = result[i].videoId;
+                var videoName = result[i].videoName;
+                var videoDescription = result[i].videoDescription;
+                var videoImage = result[i].videoImage;
+                var videoContent = result[i].videoContent;
+                var videoUpdatedate = result[i].videoUpdatedate;
+                var videoAmountViews = result[i].videoAmountViews;
+                var videoAmountComments = result[i].videoAmountComments;
+                var videoLikes = result[i].videoLikes;
+                var videoDislikes = result[i].videoDislikes;
+                var userId = result[i].userId;
+                var userName = result[i].userName;
+                var amountVideos = result[i].amountVideos;
+                
+                var percentageLikes = (100 * videoLikes) / (videoLikes + videoDislikes);
+                var percentageDislikes = (100 * videoDislikes) / (videoLikes + videoDislikes);
+                
+                $("#searchIconContent").append(
+
+                    "<div id='videoPortrait_Searchengine"+videoId+"' style='width:100%; cursor: pointer;' "
+                    +"onclick='showVideo("+videoId+", \""+videoName+"\", \""+videoDescription+"\", \""+videoImage+"\", \""+videoContent+"\", \""+videoUpdatedate+"\", "+videoAmountViews+", "+videoAmountComments+", "+videoLikes+", "+videoDislikes+"), "
+                    +"updateVideoInformation(\""+videoName+"\", \""+userName+"\");'>"
+
+                        +"<table border='0' width='100%'>"
+                        +"<tr height='70px'>"
+                            +"<td width='130px' height='70px'>"
+                                +"<div style='overflow:hidden; height:70px; width:130px; text-align:center; background-color: white;'>"
+                                    +"<img style='"
+                                    +"height:100%; cursor: pointer;"
+                                    +"opacity: 0.9; "
+                                    +"z-index: 1;' "
+                                    +"src='files/"+videoImage+"' "
+                                    +"alt='Mountain View'>"
+                                +"</div>"
+                            +"</td>"
+                            +"<td>"
+                                +"<div>"
+                                    +" <b>"+videoName+"</b><br>"
+                                    +" "+videoUpdatedate+"<br>"
+                                    +" "+videoAmountViews+" views<br>"
+                                    +" "+videoAmountComments+" comments<br>"
+                                    +" <div style='height: 5px; width: 100%;'>"
+                                        +"<div style='display: inline-block; height: 5px; width: "+percentageLikes+"%; background-color: blue; '></div>"
+                                        +"<div style='display: inline-block; height: 5px; width: "+percentageDislikes+"%; background-color: red; '></div>"
+                                    +" </div>"
+                                +"</div>"
+                            +"</td>"
+                        +"</tr>"
+                        +"</table>"
+                    +"</div>"
+                );
+                
+            }
+            
+            if (amountVideos === 0)
+            {
+                $("#searchArea").append(
+
+                    "<div>"
+
+                        +"<table border='1' width='100%'>"
+                        +"<tr height='150px'>"
+                            +"<td width='250px' height='150px'>"
+                                +"<div>"
+                                    +" <b>There isn't results for this search.</b><br>"
+                                +"</div>"
+                            +"</td>"
+                        +"</tr>"
+                        +"</table>"
+                    +"</div>"
+                );
+            }
+            
+        }).fail(function () {
+            alert('ERROR');
+        });
+    }
+    
+    
+</script>

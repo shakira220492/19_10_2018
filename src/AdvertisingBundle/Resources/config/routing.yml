@@ -1,0 +1,3 @@
+advertising_homepage:
+    path:     /advertising
+    defaults: { _controller: AdvertisingBundle:Default:index }

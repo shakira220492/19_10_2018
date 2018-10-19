@@ -1,0 +1,329 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+    {{ parent() }}
+
+    <style>
+        {#esto es para los scrollbar#}
+        
+        /* width */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #888; 
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+        }
+    </style>
+
+    <body style="overflow: hidden;
+          background-color: white;">
+
+        {{ form_start(get_stored_field_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'get-stored-field-ajax'|default('form')} }) }}
+        {{ form_end(get_stored_field_form_ajax) }}
+
+        {{ form_start(get_stored_layout_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'get-stored-layout-ajax'|default('form')} }) }}
+        {{ form_end(get_stored_layout_form_ajax) }}
+
+        {{ form_start(set_this_field_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'set-this-field-ajax'|default('form')} }) }}
+        {{ form_end(set_this_field_form_ajax) }}
+
+        {{ form_start(set_this_layout_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'set-this-layout-ajax'|default('form')} }) }}
+        {{ form_end(set_this_layout_form_ajax) }}
+
+        {{ form_start(delete_stored_field_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'delete-stored-field-ajax'|default('form')} }) }}
+        {{ form_end(delete_stored_field_form_ajax) }}
+
+        {{ form_start(delete_stored_layout_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'delete-stored-layout-ajax'|default('form')} }) }}
+        {{ form_end(delete_stored_layout_form_ajax) }}
+
+        {{ form_start(update_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'update-ajax'|default('form')} }) }}
+        {{ form_end(update_form_ajax) }}
+
+        {{ form_start(set_usualMode_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'set-usualMode-ajax'|default('form')} }) }}
+        {{ form_end(set_usualMode_form_ajax) }}
+
+        {{ form_start(set_currentMode_form_ajax, { 'attr' : {'novalidate': 'novalidate', 'role' : 'form', 'id': 'set-currentMode-ajax'|default('form')} }) }}
+        {{ form_end(set_currentMode_form_ajax) }}
+
+        <div id='emergentWindow'
+             style="width: 100%;
+                    height: 100%;
+{#                    opacity: 0.7;#}
+                    background-color: white;
+                    z-index: 1;
+                    position: absolute;
+                    transition: 0.6s;">
+        </div>
+        
+        <div id="displaceIcon-wrapper">
+        </div>
+
+        <div id="displaceIcon">
+            <img src="files/images/icons/displace.png" alt="Mountain View" style="width:30px; height:30px; opacity: 0.9;">
+        </div>
+
+        <div id="rowLeftIcon">
+            <img src="files/images/icons/leftArrow.png" alt="Mountain View" style="width:30px; height:30px;">
+        </div>
+
+        <div id="rowRightIcon">
+            <img src="files/images/icons/rightArrow.png" alt="Mountain View" style="width:30px; height:30px;">
+        </div>
+
+        <div id="presentationArea">
+            {{ include('@Home/home/sub/presentationArea.html.twig') }}
+        </div>
+
+        {# -------------------------------------------- #}
+        
+        <div id="listBar">
+            {{ include('@Home/home/sub/listBar.html.twig') }}
+        </div>
+
+        <div id="searchBar">
+            {{ include('@Home/home/sub/searchBar.html.twig') }}
+        </div>
+        
+        <div id="searchArea">
+            {{ include('@Home/home/sub/searchArea.html.twig') }}
+        </div>
+
+        <div id="configurationArea">
+            {{ include('@Home/home/sub/configurationArea.html.twig') }}
+        </div>
+        
+        <div id="configurationBar">
+            {{ include('@Home/home/sub/configurationBar.html.twig') }}
+        </div>
+
+        <div id="invisibleLayer">
+            {{ include('@Home/home/sub/invisibleLayer.html.twig') }}
+        </div>
+
+        <div id="playBanner">
+            {{ include('@Home/home/sub/playBanner.html.twig') }}
+        </div>
+
+        <div id="sessionArea">
+            {{ include('@Home/home/sub/sessionArea.html.twig') }}
+        </div>
+        
+        <div id="videoInformation">
+            {{ include('@Home/home/sub/videoInformation.html.twig') }}
+        </div>
+
+        <div id="closedCaptionArea">
+            -
+            {{ include('@ShowLyrics/Default/index.html.twig') }}
+        </div>
+        
+        <div id="lyricsArea2">
+        </div>
+        
+        
+        <div id='playBannerBgColor'
+             style='
+             z-index: 4;
+             bottom: 0px;
+             left: 0px;
+             right: 0px;
+             height: 45px;
+             background-color: gray;
+             opacity: 0.2;
+             position: absolute;
+             '>
+        </div>
+        
+        <div id='donateArea'>
+            {{ include('@Paypal/Default/index.html.twig') }}
+        </div>
+
+    </body>
+
+    
+    
+    <script>
+{#        $('#closedCaptionArea').draggable({containment: "#volumeBar", scroll: true});#}
+        {#$('#closedCaptionArea').draggable();#}
+    </script>
+    
+    <script>
+        var icon = document.getElementById("displaceIcon");
+        var displaceIconWrapper = document.getElementById("displaceIcon-wrapper");
+
+        var size = "3"; //just in case... "3"
+        var mode = "visible";
+        var bgMode = "withBg";
+        var statusSpecificVideo = "par";
+        var repetitions = 0;
+        var modeContent = "dynamic";
+        
+        var modeOptions_VideoBundle = "visible";
+
+        document.addEventListener("mousemove", transitionDisplace, false);
+        document.addEventListener("mousemove", delizeElements, false);
+        displaceIconWrapper.addEventListener("mousedown", activateElement, false);
+        displaceIconWrapper.addEventListener("mouseup", desactivateElement, false);
+        displaceIconWrapper.addEventListener("mouseover", desactivateElement, false);
+        icon.addEventListener("mouseover", desactivateElement, false);
+        displaceIconWrapper.addEventListener("mouseover", prepareIcon, false);
+
+        var buttonActivate = "0";
+
+        function prepareIcon()
+        {
+            icon.style.transitionProperty = "all";
+            icon.style.transitionDuration = "0s";
+        }
+
+        function activateElement()
+        {
+            buttonActivate = "1";
+
+            document.getElementById("presentationArea").style.transitionDuration = "0s";
+            document.getElementById("playBanner").style.transitionDuration = "0s";
+            document.getElementById("listBar").style.transitionDuration = "0s";
+
+            document.getElementById("configurationBar").style.transitionDuration = "0s";
+            document.getElementById('configurationArea').style.transitionDuration = "0s";
+            document.getElementById('videoInformation').style.transitionDuration = "0s";
+
+            document.getElementById('searchBar').style.transitionDuration = "0s";
+
+            document.getElementById("rowRightIcon").style.opacity = 0.4;
+            document.getElementById('rowLeftIcon').style.opacity = 0.4;
+            
+            document.getElementById("rowRightIcon").style.zIndex = 7;
+            document.getElementById('rowLeftIcon').style.zIndex = 7;
+        }
+
+        function desactivateElement(e)
+        {
+            buttonActivate = "0";
+
+            var referenceLocation = document.getElementById("displaceIcon").style.right;
+
+            displaceIconWrapper.style.top = "120px";
+            displaceIconWrapper.style.bottom = ($(window).height() - 150) + "px";
+
+            displaceIconWrapper.style.left = $(window).width() - (parseInt(referenceLocation) + 30) + "px";
+            displaceIconWrapper.style.right = parseInt(referenceLocation) + "px";
+
+            document.getElementById("rowRightIcon").style.opacity = 0;
+            document.getElementById('rowLeftIcon').style.opacity = 0;
+            
+            document.getElementById("rowRightIcon").style.zIndex = 1;
+            document.getElementById('rowLeftIcon').style.zIndex = 1;
+        }
+
+        function transitionDisplace(e)
+        {
+            if (buttonActivate === "1")
+            {
+                document.getElementById("displaceIcon").style.right = $(window).width() - (e.pageX + 30) + "px";
+
+                displaceIconWrapper.style.left = "0px";
+                displaceIconWrapper.style.right = "0px";
+                displaceIconWrapper.style.top = "0px";
+                displaceIconWrapper.style.bottom = "0px";
+            }
+        }
+
+        function delizeElements(e)
+        {
+            if (buttonActivate === "0")
+            {
+                //console.log("deslize desactivate");
+            } else if (buttonActivate === "1")
+            {
+                console.log("deslize activate");
+                var rightPart = $(window).width() - 160;
+
+                if (e.pageX <= 300)
+                {
+                    document.getElementById("presentationArea").style.right = ($(window).width() - 300) + "px";
+                    document.getElementById("playBanner").style.right = ($(window).width() - 300) + "px";
+
+                    document.getElementById("configurationArea").style.width = $(window).width() - (560) + "px";
+                    document.getElementById("videoInformation").style.width = $(window).width() - (255) + "px";
+
+                    document.getElementById("displaceIcon").style.right = ($(window).width() - 330) + "px";
+                    document.getElementById("rowLeftIcon").style.right = ($(window).width() - 300) + "px";
+                    document.getElementById("rowRightIcon").style.right = ($(window).width() - 360) + "px";
+                } else if (e.pageX >= rightPart - 30)
+                {
+                    document.getElementById("presentationArea").style.width = (rightPart - 30) + "px";
+                    document.getElementById("playBanner").style.width = (rightPart - 30) + "px";
+
+                    document.getElementById("configurationArea").style.width = $(window).width() - (rightPart - 60) + "px";
+                    document.getElementById("videoInformation").style.width = $(window).width() - (rightPart - 235) + "px";
+
+                    document.getElementById("displaceIcon").style.right = 160 + "px";
+                    document.getElementById("rowLeftIcon").style.right = 160 + "px";
+                    document.getElementById("rowRightIcon").style.right = 160 + "px";
+                } else
+                {
+                    if (size === "1")
+                    {
+{#                        document.getElementById("presentationArea").style.width = e.pageX + 30 + "px";
+                        document.getElementById("playBanner").style.width = e.pageX + 30 + "px";#}
+                        
+                        document.getElementById("configurationArea").style.width = $(window).width() - (e.pageX + 310) + "px";
+                        document.getElementById("videoInformation").style.width = $(window).width() - (e.pageX + 310) + "px";
+
+                        document.getElementById("configurationBar").style.right = $(window).width() - (e.pageX + 30) + "px";
+
+                        document.getElementById("rowLeftIcon").style.left = e.pageX - 30 + "px";
+                        document.getElementById("rowRightIcon").style.left = e.pageX + 30 + "px";
+                    } else if (size === "2") {
+                        document.getElementById("presentationArea").style.width = e.pageX + 30 + "px";
+                        document.getElementById("playBanner").style.width = e.pageX + 30 + "px";
+
+                        document.getElementById("configurationArea").style.width = $(window).width() - (e.pageX + 310) + "px";
+                        document.getElementById("videoInformation").style.width = $(window).width() - (e.pageX + 310) + "px";
+
+                        document.getElementById("configurationBar").style.right = $(window).width() - (e.pageX + 30) + "px";
+
+                        document.getElementById("rowLeftIcon").style.left = e.pageX - 30 + "px";
+                        document.getElementById("rowRightIcon").style.left = e.pageX + 30 + "px";
+                    } else if (size === "3") { {#corregido#}
+{#                        document.getElementById("presentationArea").style.width = e.pageX + 30 + "px";
+                        document.getElementById("playBanner").style.width = e.pageX + 30 + "px";#}
+
+                        document.getElementById("configurationArea").style.width = $(window).width() - (e.pageX + 310) + "px";
+                        document.getElementById("videoInformation").style.width = $(window).width() - (e.pageX + 310) + "px";
+
+                        document.getElementById("configurationBar").style.right = $(window).width() - (e.pageX + 30) + "px";
+
+                        document.getElementById("rowLeftIcon").style.left = e.pageX - 30 + "px";
+                        document.getElementById("rowRightIcon").style.left = e.pageX + 30 + "px";
+                    } else if (size === "4") { {#corregido#}
+{#                        document.getElementById("presentationArea").style.width = e.pageX + 30 + "px";
+                        document.getElementById("playBanner").style.width = e.pageX + 30 + "px";#}
+
+                        document.getElementById("configurationArea").style.width = $(window).width() - (e.pageX + 310) + "px";
+                        document.getElementById("videoInformation").style.width = $(window).width() - (e.pageX + 310) + "px";
+
+                        document.getElementById("configurationBar").style.right = $(window).width() - (e.pageX + 30) + "px";
+
+                        document.getElementById("rowLeftIcon").style.left = e.pageX - 30 + "px";
+                        document.getElementById("rowRightIcon").style.left = e.pageX + 30 + "px";
+                    }
+                }
+            }
+        }
+    </script>
+
+{% endblock %}

@@ -1,0 +1,47 @@
+<div id='videoIconButton' class='animatedButton'
+     style="position: absolute;
+     height: 30px;
+     width: 30px;
+     top: 20px;
+     z-index: 1;">
+    <img style='
+         width:30px; 
+         height:30px; 
+         opacity: 0.9;
+         z-index: 1;' 
+         src="files/images/icons/presentation/video.png" alt="Mountain View">
+</div>
+<script>
+    var videoIconButton = document.getElementById('videoIconButton');
+    
+    videoIconButton.addEventListener("click", show_editLyricsIconContent, false);
+    
+    function show_editLyricsIconContent()
+    {
+        var editLyricsIconContent = document.getElementById('editLyricsIconContent');
+        
+        if (editLyricsIconContent.style.display == "none")
+        {
+            clear_options();
+            editLyricsIconContent.style.display = "block";
+        } else
+        {
+            editLyricsIconContent.style.display = "none";
+        }
+    }
+    
+    function clear_options()
+    {
+        var artistIconContent = document.getElementById('artistIconContent');
+        var profileIconContent = document.getElementById('profileIconContent');
+        var songIconContent = document.getElementById('songIconContent');
+        var uploadVideoIconContent = document.getElementById('uploadVideoIconContent');
+        var editLyricsIconContent = document.getElementById('editLyricsIconContent');
+        
+        artistIconContent.style.display = "none";
+        profileIconContent.style.display = "none";
+        songIconContent.style.display = "none";
+        uploadVideoIconContent.style.display = "none";
+        editLyricsIconContent.style.display = "none";
+    }
+</script>
